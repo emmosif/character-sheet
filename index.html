@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>JOJO — BIZARRE STAND | Анкета персонажа</title>
+    <title>JOJO'S BIZARRE ADVENTURE | Анкета персонажа</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
         
@@ -446,7 +446,7 @@
 <body>
 <div class="container">
 <div class="stand-card">
-    <div class="jojo-tag">✦ BIZARRE STAND ✦</div>
+    <div class="jojo-tag">✦ STAND USER ✦</div>
 
     <div style="display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 20px;">
         <button class="jojo-btn" id="exportBtn">⟡ SAVE ⟡</button>
@@ -489,27 +489,26 @@
             <div class="resource"><span>❤️ HP</span> <input type="number" id="hp" value="0"> / <span id="hpMax">0</span></div>
             <div class="resource"><span>✦ STAND ENERGY</span> <input type="number" id="energy" value="0"> / <span id="energyMax">100</span></div>
             
-            <div class="combat-stat"><div>🛡️  DEFENSE (KD)</div><div class="combat-stat-value" id="kdValue">0</div></div>
-            <div class="combat-stat"><div>⚡ REACTION</div><div class="combat-stat-value" id="reactionValue">0</div></div>
-            <div class="combat-stat"><div>🧠 WILL</div><div class="combat-stat-value" id="willValue">0</div></div>
+            <div class="combat-stat"><div>🛡️  ЗАЩИТА (KD)</div><div class="combat-stat-value" id="kdValue">0</div></div>
+            <div class="combat-stat"><div>⚡ РЕАКЦИЯ</div><div class="combat-stat-value" id="reactionValue">0</div></div>
+            <div class="combat-stat"><div>🧠 ВОЛЯ</div><div class="combat-stat-value" id="willValue">0</div></div>
             
-            <h4>⌘ MELEE</h4>
+            <h4>⌘ БЛИЖНИЙ БОЙ</h4>
             <select id="meleeType" class="weapon-select">
                 <option value="strength">Силовое оружие (Strength)</option>
                 <option value="agility">Лёгкое оружие (Agility)</option>
             </select>
-            <div class="combat-stat"><div>⚔️ MELEE</div><div class="combat-stat-value" id="meleeValue">0</div><div class="small-text">+ proficiency bonus (+2)</div></div>
+            <div class="combat-stat"><div>⚔️ БЛИЖНИЙ БОЙ</div><div class="combat-stat-value" id="meleeValue">0</div><div class="small-text">+ Мастерство</div></div>
             
-            <h4>⌘ RANGED</h4>
-            <div class="combat-stat"><div>🏹 RANGED</div><div class="combat-stat-value" id="rangedValue">0</div><div class="small-text">+ proficiency (if weapon)</div></div>
-            <label style="font-size:0.7rem"><input type="checkbox" id="rangedProf"> 🎯 владение оружием (+2)</label>
+            <h4>⌘ ДАЛЬНИЙ БОЙ</h4>
+            <div class="combat-stat"><div>🏹 ДАЛЬНИЙ БОЙ</div><div class="combat-stat-value" id="rangedValue">0</div><div class="small-text">+ Мастерство</div></div>
             
             <div class="combat-stat"><div>🌀 STAND MOD</div><div class="combat-stat-value" id="standMod">0</div></div>
             
-            <h3>✦ SPECIAL MOVES</h3>
+            <h3>✦ SPECIAL SKILLS</h3>
             <div id="skillList" class="skill-list"></div>
-            <button class="jojo-btn" id="addSkillBtn" style="width:100%">+ ADD MOVE</button>
-            <button class="jojo-btn" id="nextTurnBtn" style="width:100%; margin-top:18px;">◈ NEXT TURN ◈</button>
+            <button class="jojo-btn" id="addSkillBtn" style="width:100%">+ ADD SKILL</button>
+            <button class="jojo-btn" id="nextTurnBtn" style="width:100%; margin-top:18px;">◈СЛЕДУЮЩИЙ ХОД ◈</button>
             <div id="turnMessage" style="text-align:center; margin-top:12px; font-size:0.7rem; font-style:italic; color:#af9a6a;">—— bizarre ——</div>
         </div>
     </div>
