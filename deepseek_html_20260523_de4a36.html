@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>JOJO STAND CHRONICLES — Анкета персонажа</title>
+    <style>
+        /* JOJO СТИЛЬ — невероятные приключения */
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Special+Elite&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at 10% 20%, #1a0b0b, #0a0508);
+            font-family: 'Oswald', 'Arial', sans-serif;
+            padding: 30px 20px;
+            color: #f0ede8;
+            min-height: 100vh;
+        }
+
+        /* драматичные уголки как в манге */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* главная карточка с кантом "меняющих цвет" */
+        .stand-card {
+            background: linear-gradient(145deg, #1e1a1f 0%, #110d12 100%);
+            border: 3px double #e6b422;
+            border-radius: 0px;
+            padding: 28px 32px;
+            box-shadow: 20px 20px 0px 0px #7a2e2e, 0 0 0 4px #ffd966, inset 0 0 20px rgba(230,180,34,0.2);
+            position: relative;
+        }
+
+        /* кричащая лента */
+        .jojo-title {
+            font-family: 'Special Elite', monospace;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            background: #e6b422;
+            color: #110d12;
+            display: inline-block;
+            padding: 4px 24px;
+            position: absolute;
+            top: -18px;
+            left: 40px;
+            font-weight: bold;
+            box-shadow: 6px 6px 0 #4a1a1a;
+            text-transform: uppercase;
+        }
+
+        /* кнопки как в схватках */
+        .jojo-btn {
+            background: #2a1c1a;
+            border: 1px solid #e6b422;
+            color: #ffdf8c;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 6px 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 3px 3px 0 #5a2e2a;
+        }
+        .jojo-btn:hover {
+            background: #e6b422;
+            color: #1e0a0a;
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 #2f1210;
+        }
+
+        /* панель характеристик в стиле "стендов" */
+        .stat-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 14px;
+            margin-top: 20px;
+        }
+        .stat-item {
+            background: #0e0b10e6;
+            border-left: 8px solid #e6b422;
+            padding: 6px 12px 6px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            backdrop-filter: blur(2px);
+        }
+        .stat-name {
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ffd966, #ffad44);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 4px #8b2a1a;
+        }
+        .stat-value {
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin: 0 12px;
+            color: #f5c542;
+            text-shadow: 0 0 5px #aa3e2c;
+        }
+        .stat-buttons button {
+            background: #241c18;
+            border: none;
+            font-size: 1.4rem;
+            font-weight: bold;
+            width: 32px;
+            margin: 0 3px;
+            color: #e6b422;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .stat-buttons button:hover {
+            background: #e6b422;
+            color: #1a0808;
+            transform: scale(1.1);
+        }
+
+        /* ресурсы – здоровье и энергия как "дух" */
+        .resource-block {
+            background: #140e12;
+            border: 1px solid #ffcd74;
+            padding: 12px 18px;
+            margin: 12px 0;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .resource {
+            flex: 1;
+            font-size: 1.2rem;
+        }
+        .resource input {
+            background: #221c1f;
+            border: none;
+            border-bottom: 2px solid #e6b422;
+            width: 80px;
+            font-size: 1.4rem;
+            text-align: center;
+            color: #fadd9c;
+            font-weight: bold;
+        }
+
+        .kd-stand {
+            background: #00000066;
+            padding: 12px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            border-left: 6px solid #ffaa33;
+            backdrop-filter: blur(4px);
+            margin: 15px 0;
+            letter-spacing: 1px;
+        }
+
+        .next-turn {
+            background: linear-gradient(95deg, #a12a2a, #4f1a1a);
+            font-size: 1.4rem;
+            padding: 12px;
+            width: 100%;
+            font-weight: bold;
+            text-shadow: 2px 2px 0 #2a0a0a;
+            margin: 15px 0;
+            border: none;
+            box-shadow: 0 8px 0 #441010;
+        }
+        .next-turn:active {
+            transform: translateY(3px);
+            box-shadow: 0 4px 0 #441010;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 14px 0;
+            min-height: 80px;
+        }
+
+        .skill-tag {
+            background: #231d1b;
+            border-right: 4px solid #f0b34b;
+            padding: 6px 16px;
+            font-weight: bold;
+            font-style: italic;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .skill-tag span {
+            cursor: pointer;
+            margin-left: 10px;
+            color: #ff8866;
+        }
+
+        hr {
+            border-color: #e6b42240;
+            margin: 12px 0;
+        }
+
+        .two-columns {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .left-col { flex: 1.4; min-width: 260px; }
+        .right-col { flex: 0.9; min-width: 240px; }
+
+        input, select {
+            background: #221c20;
+            border: 1px solid #e6b422;
+            padding: 8px 12px;
+            color: #ffecb3;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="stand-card">
+        <div class="jojo-title">⭐ STAND USER ⭐</div>
+
+        <div style="margin-top: 20px;">
+            <div class="toolbar" style="display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 24px;">
+                <button class="jojo-btn" id="exportBtn">📀 SAVE STAND</button>
+                <button class="jojo-btn" id="importBtn">🔄 LOAD STAND</button>
+                <button class="jojo-btn" id="resetBtn">💀 ZERO / NEW</button>
+                <input type="file" id="fileInput" accept=".json" style="display:none">
+            </div>
+
+            <div class="two-columns">
+                <div class="left-col">
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
+                        <div><label>🔮 USER NAME</label><br><input type="text" id="charName" placeholder="Joestar" style="width:180px"></div>
+                        <div><label>⭐ STAND GRADE</label><br>
+                            <select id="grade">
+                                <option value="E">E</option><option value="D">D</option><option value="C">C</option>
+                                <option value="B" selected>B</option><option value="A">A</option><option value="S">S (REQUIEM)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="font-size: 1.7rem; font-weight: bold; border-bottom: 3px solid #e6b422; margin: 15px 0 10px;">⚔️ STAND STATS</div>
+                    <div id="statsContainer" class="stat-panel"></div>
+                </div>
+
+                <div class="right-col">
+                    <div style="background:#0a060a; padding:10px;">
+                        <div style="font-size: 1.5rem; margin-bottom: 8px;">🌀 BATTLE STATUS</div>
+                        <div class="resource-block">
+                            <div class="resource">❤️ HP: <input type="number" id="hp" value="0"> / <span id="hpMax">100</span></div>
+                            <div class="resource">✨ STAND ENERGY: <input type="number" id="energy" value="0"> / <span id="energyMax">100</span></div>
+                        </div>
+                        <div class="kd-stand" id="kdDisplay">
+                            🎯  DESTINY BONUS &nbsp;|&nbsp;   EVASION / RESIST
+                        </div>
+                        <button class="jojo-btn next-turn" id="nextTurnBtn">⚡ THE WORLD! NEXT TURN ⚡</button>
+                        <div id="turnMessage" style="text-align: center; font-family:monospace; margin: 10px 0; color:#dbb45c;">—— ORA ORA ——</div>
+                    </div>
+
+                    <div style="margin-top: 25px;">
+                        <div style="font-size: 1.3rem;">📜 STAND ABILITIES</div>
+                        <div id="skillList" class="skill-list"></div>
+                        <button class="jojo-btn" id="addSkillBtn" style="width: 100%;">➕ ADD ABILITY / STAND POWER</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JOJO EDITION — пустая анкета
+    const defaultData = {
+        name: "",
+        grade: "B",
+        stats: {
+            сила: 0, управление: 0, телосложение: 0,
+            память: 0, интеллект: 0, восприятие: 0
+        },
+        hp: 0, energy: 0, hpMax: 100, energyMax: 100,
+        skills: []
+    };
+
+    let currentData = JSON.parse(JSON.stringify(defaultData));
+    const statKeys = ["сила", "управление", "телосложение", "память", "интеллект", "восприятие"];
+
+    function renderAll() {
+        document.getElementById("charName").value = currentData.name;
+        document.getElementById("grade").value = currentData.grade;
+        document.getElementById("hp").value = currentData.hp;
+        document.getElementById("energy").value = currentData.energy;
+        document.getElementById("hpMax").innerText = currentData.hpMax;
+        document.getElementById("energyMax").innerText = currentData.energyMax;
+
+        const container = document.getElementById("statsContainer");
+        container.innerHTML = "";
+        for (let key of statKeys) {
+            const val = currentData.stats[key] || 0;
+            const div = document.createElement("div");
+            div.className = "stat-item";
+            div.innerHTML = `
+                <span class="stat-name">${key.toUpperCase()}</span>
+                <span class="stat-value" id="stat_${key}">${val}</span>
+                <div class="stat-buttons">
+                    <button class="dec-btn" data-stat="${key}">-</button>
+                    <button class="inc-btn" data-stat="${key}">+</button>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        document.querySelectorAll(".dec-btn").forEach(btn => btn.addEventListener("click", decHandler));
+        document.querySelectorAll(".inc-btn").forEach(btn => btn.addEventListener("click", incHandler));
+
+        const skillDiv = document.getElementById("skillList");
+        skillDiv.innerHTML = "";
+        if (currentData.skills.length === 0) {
+            skillDiv.innerHTML = '<div style="color:#a77c4a;">⚠️ No Stand Power yet</div>';
+        } else {
+            currentData.skills.forEach((sk, idx) => {
+                const chip = document.createElement("div");
+                chip.className = "skill-tag";
+                chip.innerHTML = `${sk} <span data-skill-idx="${idx}" class="remove-skill">✖</span>`;
+                skillDiv.appendChild(chip);
+            });
+        }
+        updateKD();
+    }
+
+    function decHandler(e) { changeStat(e, -1); }
+    function incHandler(e) { changeStat(e, 1); }
+    function changeStat(e, delta) {
+        const statName = e.currentTarget.getAttribute("data-stat");
+        let newVal = (currentData.stats[statName] || 0) + delta;
+        newVal = Math.min(20, Math.max(0, newVal));
+        currentData.stats[statName] = newVal;
+        document.getElementById(`stat_${statName}`).innerText = newVal;
+        updateKD();
+    }
+
+    function updateKD() {
+        const grade = currentData.grade;
+        let gradeBonus = 0;
+        if (grade === "S") gradeBonus = 7;
+        else if (grade === "A") gradeBonus = 5;
+        else if (grade === "B") gradeBonus = 3;
+        else if (grade === "C") gradeBonus = 1;
+        else if (grade === "D") gradeBonus = 0;
+        else gradeBonus = -1;
+
+        const strKD = (currentData.stats["сила"] || 0) + gradeBonus;
+        const bodyKD = (currentData.stats["телосложение"] || 0) + gradeBonus;
+        const ctrlKD = (currentData.stats["управление"] || 0) + gradeBonus;
+        document.getElementById("kdDisplay").innerHTML = `🎯 STAND POWER:  STR ${strKD}  |  END ${bodyKD}  |  CTRL ${ctrlKD}    [GRADE: ${grade} × DESTINY]`;
+    }
+
+    function updateTurnMessage(msg) {
+        const turnDiv = document.getElementById("turnMessage");
+        turnDiv.innerHTML = msg || "💢 NEXT TURN — ORAORAORA! 💢";
+    }
+
+    function exportChar() {
+        currentData.name = document.getElementById("charName").value;
+        currentData.grade = document.getElementById("grade").value;
+        currentData.hp = parseInt(document.getElementById("hp").value) || 0;
+        currentData.energy = parseInt(document.getElementById("energy").value) || 0;
+        const dataStr = JSON.stringify(currentData, null, 2);
+        const blob = new Blob([dataStr], {type: "application/json"});
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `jojo_${currentData.name || "standuser"}.json`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+    }
+
+    function importFromFile(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const loaded = JSON.parse(e.target.result);
+                currentData = { ...defaultData, ...loaded, stats: { ...defaultData.stats, ...loaded.stats } };
+                if (!currentData.skills) currentData.skills = [];
+                renderAll();
+                updateTurnMessage("✅ STAND LOADED! THE WORLD IS READY");
+            } catch(err) { alert("FILE CORRUPT! JOJO REFERENCE DENIED"); }
+        };
+        reader.readAsText(file);
+    }
+
+    function resetToEmpty() {
+        currentData = JSON.parse(JSON.stringify(defaultData));
+        renderAll();
+        updateTurnMessage("🔄 ZERO — A NEW STAND USER APPEARS!");
+    }
+
+    function addSkill() {
+        let newSkill = prompt("NEW STAND ABILITY NAME:", "STAR FINGER");
+        if (newSkill?.trim()) currentData.skills.push(newSkill.trim());
+        renderAll();
+    }
+
+    function nextTurn() {
+        updateTurnMessage("⚡ ZA WARUDO! TOKI WO TOMARE! ⚡  (Energy not recovered — JoJo rule)");
+        // здесь можно добавить свои эффекты хода
+    }
+
+    function handleSkillRemove(e) {
+        if (e.target.classList.contains("remove-skill")) {
+            const idx = parseInt(e.target.getAttribute("data-skill-idx"));
+            if (!isNaN(idx)) currentData.skills.splice(idx, 1);
+            renderAll();
+        }
+    }
+
+    function bindEdits() {
+        document.getElementById("charName").addEventListener("input", (e) => currentData.name = e.target.value);
+        document.getElementById("grade").addEventListener("change", (e) => { currentData.grade = e.target.value; updateKD(); });
+        document.getElementById("hp").addEventListener("input", (e) => currentData.hp = parseInt(e.target.value) || 0);
+        document.getElementById("energy").addEventListener("input", (e) => currentData.energy = parseInt(e.target.value) || 0);
+    }
+
+    function init() {
+        renderAll();
+        bindEdits();
+        document.getElementById("exportBtn").addEventListener("click", exportChar);
+        document.getElementById("importBtn").addEventListener("click", () => document.getElementById("fileInput").click());
+        document.getElementById("resetBtn").addEventListener("click", resetToEmpty);
+        document.getElementById("nextTurnBtn").addEventListener("click", nextTurn);
+        document.getElementById("addSkillBtn").addEventListener("click", addSkill);
+        document.getElementById("fileInput").addEventListener("change", (e) => {
+            if (e.target.files[0]) importFromFile(e.target.files[0]);
+            e.target.value = "";
+        });
+        document.getElementById("skillList").addEventListener("click", handleSkillRemove);
+    }
+    init();
+</script>
+</body>
+</html>
