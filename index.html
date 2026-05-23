@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>JOJO — STAND WHEEL | Анкета стенда</title>
+    <title>JOJO — STAND WHEEL | Анкета персонажа</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Special+Elite&display=swap');
 
@@ -21,7 +21,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -47,10 +47,27 @@
             box-shadow: 6px 6px 0 #4a1818;
         }
 
+        .two-columns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .wheel-section {
+            flex: 1.5;
+            min-width: 350px;
+        }
+        
+        .stats-section {
+            flex: 1;
+            min-width: 280px;
+        }
+
         .wheel-container {
             display: flex;
             justify-content: center;
-            margin: 30px 0;
+            margin: 20px 0;
             position: relative;
         }
         
@@ -60,31 +77,48 @@
             box-shadow: 0 0 0 6px #e6b42244, 0 0 0 12px #2c1420, 0 10px 35px black;
             width: 100%;
             height: auto;
-            max-width: 600px;
+            max-width: 550px;
             aspect-ratio: 1/1;
             cursor: pointer;
         }
 
-        .stats-control {
+        .stand-type-selector {
+            background: #140e16;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 6px solid #e6b422;
+        }
+        
+        .stand-type-selector label {
+            margin-right: 20px;
+            cursor: pointer;
+        }
+        
+        .stand-type-selector input {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .stats-control-wheel {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
-            margin: 25px 0 20px;
+            gap: 15px;
+            margin: 20px 0;
         }
         
         .stat-control-item {
             background: #140e16;
             border-left: 6px solid #e6b422;
-            padding: 10px 18px;
-            min-width: 110px;
+            padding: 8px 12px;
+            min-width: 100px;
             text-align: center;
         }
         
         .stat-label {
             font-weight: bold;
             letter-spacing: 2px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             color: #ffdd99;
         }
@@ -93,62 +127,114 @@
             background: #241e28;
             color: #ffcd7e;
             border: 1px solid #e6b422;
-            padding: 6px 12px;
-            font-size: 1.2rem;
+            padding: 5px 10px;
+            font-size: 1.1rem;
             font-weight: bold;
-            margin-top: 8px;
+            margin-top: 6px;
             cursor: pointer;
-            font-family: monospace;
+            width: 65px;
+        }
+
+        /* Характеристики пользователя (D&D стиль) */
+        .user-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 15px 0;
+        }
+        
+        .user-stat {
+            background: #0e0a12;
+            padding: 8px;
             text-align: center;
-            width: 70px;
+            border-bottom: 2px solid #e6b422;
+        }
+        
+        .user-stat-name {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #ffdd99;
+        }
+        
+        .user-stat-value {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 5px 0;
+        }
+        
+        .user-stat-value input {
+            width: 55px;
+            text-align: center;
+            font-size: 1rem;
+            background: #1f1824;
+            border: 1px solid #e6b422;
+            color: #ffeaac;
+            padding: 4px;
+        }
+        
+        .user-stat-mod {
+            font-size: 0.9rem;
+            color: #ffaa66;
+            font-weight: bold;
+        }
+        
+        .user-stat-buttons button {
+            background: #2e1e26;
+            border: 1px solid #e6b422;
+            color: #ffeaac;
+            width: 24px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
         .other-panel {
             display: flex;
             flex-wrap: wrap;
-            gap: 30px;
-            margin-top: 30px;
+            gap: 20px;
+            margin-top: 25px;
         }
         
         .info-area {
             flex: 1;
             background: #0c0812cc;
-            padding: 18px;
+            padding: 15px;
             backdrop-filter: blur(4px);
         }
         
         .resource {
-            margin: 12px 0;
+            margin: 10px 0;
         }
         
         .resource input {
             background: #1f1722;
             border: none;
             border-bottom: 2px solid #e6b422;
-            width: 80px;
-            font-size: 1.2rem;
+            width: 70px;
+            font-size: 1.1rem;
             color: #ffdfaa;
             font-weight: bold;
         }
         
         .kd-stand {
             background: #00000077;
-            padding: 12px;
+            padding: 10px;
             border-left: 5px solid #e6b422;
             font-family: monospace;
-            margin: 15px 0;
+            margin: 12px 0;
         }
         
         .jojo-btn {
             background: #2e1e26;
             border: 1px solid #e6b422;
             color: #ffeaac;
-            padding: 8px 18px;
+            padding: 6px 15px;
             font-weight: bold;
             letter-spacing: 1px;
             cursor: pointer;
             transition: 0.15s;
-            margin: 5px 5px 0 0;
+            margin: 3px;
         }
         
         .jojo-btn:hover {
@@ -161,26 +247,34 @@
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin: 12px 0;
+            margin: 10px 0;
         }
         
         .skill-tag {
             background: #1f1822;
             border-right: 4px solid #e6b422;
-            padding: 4px 14px;
+            padding: 4px 12px;
+            font-size: 0.9rem;
         }
         
         input, select {
             background: #1f1824;
             border: 1px solid #e6b422;
             color: #ffeaac;
-            padding: 6px;
+            padding: 5px;
         }
         
         h3 {
             border-left: 6px solid #e6b422;
             padding-left: 12px;
-            margin: 15px 0 10px;
+            margin: 12px 0 8px;
+            font-size: 1.2rem;
+        }
+        
+        h4 {
+            color: #ffdd99;
+            margin: 10px 0 5px;
+            font-size: 1rem;
         }
     </style>
 </head>
@@ -189,43 +283,53 @@
 <div class="stand-card">
     <div class="jojo-tag">🌟 STAND WHEEL 🌟</div>
 
-    <div style="display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 10px;">
+    <div style="display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 15px;">
         <button class="jojo-btn" id="exportBtn">💾 SAVE STAND</button>
         <button class="jojo-btn" id="importBtn">📂 LOAD STAND</button>
-        <button class="jojo-btn" id="resetBtn">🌀 RESET / EMPTY</button>
+        <button class="jojo-btn" id="resetBtn">🌀 RESET</button>
         <input type="file" id="fileInput" style="display:none" accept=".json">
     </div>
 
     <div style="display: flex; gap: 20px; flex-wrap: wrap; margin: 10px 0;">
-        <div><label>🔮 USER NAME</label><br><input type="text" id="charName" placeholder="Joestar"></div>
-        <div><label>⭐ STAND GRADE</label><br>
-            <select id="grade">
-                <option>E</option><option>D</option><option>C</option><option>B</option><option selected>A</option><option>S</option>
-            </select>
+        <div><label>🔮 USER NAME</label><br><input type="text" id="charName" placeholder="Joestar" style="width:180px"></div>
+    </div>
+
+    <div class="two-columns">
+        <!-- ЛЕВАЯ КОЛОНКА: КОЛЕСО СТЕНДА -->
+        <div class="wheel-section">
+            <div class="wheel-container">
+                <canvas id="standWheel" width="550" height="550"></canvas>
+            </div>
+            
+            <!-- Тип стенда вместо грейда -->
+            <div class="stand-type-selector">
+                <h4>⭐ STAND TYPE</h4>
+                <label><input type="radio" name="standType" value="close"> Ближняя дистанция</label>
+                <label><input type="radio" name="standType" value="long"> Дальняя дистанция</label>
+                <label><input type="radio" name="standType" value="auto"> Автоматический</label>
+                <label><input type="radio" name="standType" value="radius"> Радиус неуместен</label>
+            </div>
+            
+            <!-- Управление параметрами колеса -->
+            <div class="stats-control-wheel" id="statsControlPanel"></div>
         </div>
-    </div>
-
-    <!-- КОЛЕСО СТЕНДА (Дартс + паутина) -->
-    <div class="wheel-container">
-        <canvas id="standWheel" width="600" height="600"></canvas>
-    </div>
-
-    <!-- Панель управления параметрами -->
-    <div class="stats-control" id="statsControlPanel"></div>
-
-    <div class="other-panel">
-        <div class="info-area">
+        
+        <!-- ПРАВАЯ КОЛОНКА: ХАРАКТЕРИСТИКИ ЮЗЕРА -->
+        <div class="stats-section">
+            <h3>⚡ USER STATS (D&D)</h3>
+            <div class="user-stats-grid" id="userStatsPanel"></div>
+            <div class="kd-stand" id="modSummary">🎯 Модификаторы: </div>
+            
             <h3>❤️ BATTLE STATUS</h3>
             <div class="resource">HP: <input type="number" id="hp" value="0"> / <span id="hpMax">100</span></div>
             <div class="resource">STAND ENERGY: <input type="number" id="energy" value="0"> / <span id="energyMax">100</span></div>
-            <div class="kd-stand" id="kdDisplay">🌀 PARAMETER BONUS — DESTINY</div>
-            <button class="jojo-btn" id="nextTurnBtn" style="width:100%">⚡ THE WORLD! NEXT TURN ⚡</button>
-            <div id="turnMessage" style="text-align:center; margin-top:8px;">—— ORA ORA ——</div>
-        </div>
-        <div class="info-area">
+            
             <h3>🌀 STAND ABILITIES</h3>
             <div id="skillList" class="skill-list"></div>
             <button class="jojo-btn" id="addSkillBtn">➕ ADD ABILITY</button>
+            
+            <button class="jojo-btn" id="nextTurnBtn" style="width:100%; margin-top:15px;">⚡ THE WORLD! NEXT TURN ⚡</button>
+            <div id="turnMessage" style="text-align:center; margin-top:8px;">—— ORA ORA ——</div>
         </div>
     </div>
 </div>
@@ -234,19 +338,18 @@
 <script>
     // === НАСТРОЙКИ КОЛЕСА ===
     const STAT_LABELS = ["POWER", "SPEED", "PRECISION", "RANGE", "DURABILITY", "POTENTIAL"];
-    // Ранги: ? (0), E(1), D(2), C(3), B(4), A(5), S(6)
-    const RANK_VALUES = {
-        "?": 0, "E": 1, "D": 2, "C": 3, "B": 4, "A": 5, "S": 6
-    };
+    const RANK_VALUES = { "?": 0, "E": 1, "D": 2, "C": 3, "B": 4, "A": 5, "S": 6 };
     const RANK_LIST = ["?", "E", "D", "C", "B", "A", "S"];
+    const MAX_RANK = 6;
     
-    // Максимальный уровень (для масштабирования)
-    const MAX_RANK = 6; // S
+    // Характеристики пользователя (D&D стиль)
+    const USER_STATS = ["Сила", "Управление", "Телосложение", "Память", "Интеллект", "Восприятие", "Харизма", "Манипуляция", "Притворство"];
     
     let currentData = {
         name: "",
-        grade: "A",
-        stats: {
+        standName: "",
+        standType: "close",
+        wheelStats: {
             POWER: "?",
             SPEED: "?",
             PRECISION: "?",
@@ -254,17 +357,24 @@
             DURABILITY: "?",
             POTENTIAL: "?"
         },
-        hp: 0,
-        energy: 0,
-        hpMax: 100,
-        energyMax: 100,
+        userStats: {
+            "Сила": 10, "Управление": 10, "Телосложение": 10,
+            "Память": 10, "Интеллект": 10, "Восприятие": 10,
+            "Харизма": 10, "Манипуляция": 10, "Притворство": 10
+        },
+        hp: 0, energy: 0, hpMax: 100, energyMax: 100,
         skills: []
     };
 
     const canvas = document.getElementById("standWheel");
     let ctx = canvas.getContext("2d");
     
-    // Функция отрисовки колеса (как в дартс + паутина)
+    // Вычисление модификатора (как в D&D: (значение-10)/2, округление вниз)
+    function getModifier(value) {
+        return Math.floor((value - 10) / 2);
+    }
+    
+    // Отрисовка колеса с центром для названия стенда
     function drawWheel() {
         if (!ctx) return;
         
@@ -272,33 +382,32 @@
         const h = canvas.height;
         const centerX = w / 2;
         const centerY = h / 2;
-        const outerRadius = w * 0.42;      // внешняя окружность
-        const innerRadius = w * 0.12;       // внутренняя окружность (центр)
+        const outerRadius = w * 0.42;
+        const innerRadius = w * 0.12;
         const angleStep = (Math.PI * 2) / STAT_LABELS.length;
         
         ctx.clearRect(0, 0, w, h);
         
-        // === 1. Рисуем внешнюю окружность (дартс) ===
+        // Внешняя окружность
         ctx.beginPath();
         ctx.arc(centerX, centerY, outerRadius, 0, 2 * Math.PI);
         ctx.strokeStyle = "#e6b422";
         ctx.lineWidth = 3;
         ctx.stroke();
         
-        // === 2. Рисуем внутреннюю окружность ===
+        // Внутренняя окружность
         ctx.beginPath();
         ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI);
         ctx.strokeStyle = "#e6b42288";
         ctx.lineWidth = 2;
         ctx.stroke();
         
-        // === 3. Рисуем линии от центра к краю и чёрточки ===
+        // Линии и чёрточки
         for (let i = 0; i < STAT_LABELS.length; i++) {
-            const angle = i * angleStep - Math.PI / 2; // чтобы первый был вверху
+            const angle = i * angleStep - Math.PI / 2;
             const endX = centerX + Math.cos(angle) * outerRadius;
             const endY = centerY + Math.sin(angle) * outerRadius;
             
-            // Линия от центра до внешней окружности
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
             ctx.lineTo(endX, endY);
@@ -306,16 +415,14 @@
             ctx.lineWidth = 1.5;
             ctx.stroke();
             
-            // Рисуем 6 чёрточек (для уровней E, D, C, B, A, S)
+            // Чёрточки для уровней
             for (let level = 1; level <= 6; level++) {
-                const t = level / 6; // от центра (0) до края (1)
+                const t = level / 6;
                 const radius = innerRadius + (outerRadius - innerRadius) * t;
                 const lineX = centerX + Math.cos(angle) * radius;
                 const lineY = centerY + Math.sin(angle) * radius;
-                
-                // Перпендикулярная чёрточка
                 const perpAngle = angle + Math.PI / 2;
-                const tickLength = 6;
+                const tickLength = 5;
                 const tickX1 = lineX + Math.cos(perpAngle) * tickLength;
                 const tickY1 = lineY + Math.sin(perpAngle) * tickLength;
                 const tickX2 = lineX - Math.cos(perpAngle) * tickLength;
@@ -325,43 +432,34 @@
                 ctx.moveTo(tickX1, tickY1);
                 ctx.lineTo(tickX2, tickY2);
                 ctx.strokeStyle = "#ffdd99";
-                ctx.lineWidth = 1.5;
+                ctx.lineWidth = 1.2;
                 ctx.stroke();
             }
             
-            // === Название стата снаружи ===
+            // Название стата
             const labelRadius = outerRadius + 18;
             const labelX = centerX + Math.cos(angle) * labelRadius;
             const labelY = centerY + Math.sin(angle) * labelRadius;
-            ctx.font = "bold 12px 'Oswald'";
+            ctx.font = "bold 11px 'Oswald'";
             ctx.fillStyle = "#ffeaae";
-            ctx.fillText(STAT_LABELS[i], labelX - 20, labelY + 5);
+            ctx.fillText(STAT_LABELS[i], labelX - 18, labelY + 4);
             
-            // === Буква уровня стата (крупная) под названием ===
-            const rank = currentData.stats[STAT_LABELS[i]] || "?";
-            const letterRadius = outerRadius + 38;
+            // Буква уровня
+            const rank = currentData.wheelStats[STAT_LABELS[i]] || "?";
+            const letterRadius = outerRadius + 35;
             const letterX = centerX + Math.cos(angle) * letterRadius;
             const letterY = centerY + Math.sin(angle) * letterRadius;
-            ctx.font = "bold 20px 'Special Elite'";
+            ctx.font = "bold 18px 'Special Elite'";
             ctx.fillStyle = (rank === "?") ? "#bbbbcc" : "#ffd966";
-            ctx.fillText(rank, letterX - 12, letterY + 8);
+            ctx.fillText(rank, letterX - 10, letterY + 7);
         }
         
-        // === 4. РИСУЕМ УЗОР (паутину) по выбранным статам ===
+        // Узор-паутина
         const points = [];
         for (let i = 0; i < STAT_LABELS.length; i++) {
-            const rank = currentData.stats[STAT_LABELS[i]] || "?";
-            let value = RANK_VALUES[rank];
-            if (value === undefined) value = 0;
-            
-            // Расстояние от центра: 0 = центр, 1 = край внешней окружности
-            let t;
-            if (value === 0) {
-                t = 0; // "?" — остаётся в центре
-            } else {
-                t = (value / MAX_RANK); // E=1/6, D=2/6... S=6/6
-            }
-            
+            const rank = currentData.wheelStats[STAT_LABELS[i]] || "?";
+            let value = RANK_VALUES[rank] || 0;
+            let t = (value === 0) ? 0 : (value / MAX_RANK);
             const radius = innerRadius + (outerRadius - innerRadius) * t;
             const angle = i * angleStep - Math.PI / 2;
             const x = centerX + Math.cos(angle) * radius;
@@ -369,51 +467,50 @@
             points.push({x, y});
         }
         
-        // Рисуем замкнутую линию (узор)
         if (points.length > 0) {
             ctx.beginPath();
             ctx.moveTo(points[0].x, points[0].y);
-            for (let i = 1; i < points.length; i++) {
-                ctx.lineTo(points[i].x, points[i].y);
-            }
+            for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
             ctx.closePath();
             ctx.fillStyle = "#e6b42255";
             ctx.fill();
             ctx.strokeStyle = "#ffcc66";
-            ctx.lineWidth = 3;
+            ctx.lineWidth = 2.5;
             ctx.stroke();
             
-            // Рисуем точки на узлах
             for (let p of points) {
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, 5, 0, 2 * Math.PI);
+                ctx.arc(p.x, p.y, 4, 0, 2 * Math.PI);
                 ctx.fillStyle = "#ffaa33";
                 ctx.fill();
-                ctx.shadowBlur = 0;
             }
         }
         
-        // === 5. Центральный круг с логотипом ===
+        // Центральный круг с полем для названия стенда (рисуем как поле)
         ctx.beginPath();
-        ctx.arc(centerX, centerY, innerRadius - 5, 0, 2 * Math.PI);
+        ctx.arc(centerX, centerY, innerRadius - 3, 0, 2 * Math.PI);
         ctx.fillStyle = "#0a0412";
         ctx.fill();
         ctx.strokeStyle = "#e6b422";
         ctx.lineWidth = 2;
         ctx.stroke();
-        ctx.font = "bold 12px 'Oswald'";
+        
+        // Текст названия стенда (если есть)
+        ctx.font = "bold 10px 'Oswald'";
         ctx.fillStyle = "#e6b422";
-        ctx.fillText("STAND", centerX - 24, centerY + 5);
+        let standDisplay = currentData.standName || "STAND";
+        if (standDisplay.length > 12) standDisplay = standDisplay.slice(0, 10) + "..";
+        ctx.fillText(standDisplay, centerX - 25, centerY + 4);
     }
 
-    // Создание панели управления
-    function buildStatControls() {
+    // Создание панели управления колесом
+    function buildWheelControls() {
         const panel = document.getElementById("statsControlPanel");
         if (!panel) return;
         
         panel.innerHTML = "";
         for (const label of STAT_LABELS) {
-            const currentVal = currentData.stats[label] || "?";
+            const currentVal = currentData.wheelStats[label] || "?";
             const div = document.createElement("div");
             div.className = "stat-control-item";
             div.innerHTML = `
@@ -425,56 +522,131 @@
             panel.appendChild(div);
         }
         
-        // Обработчики изменения
         document.querySelectorAll(".stat-value-select").forEach(select => {
             select.addEventListener("change", (e) => {
                 const statName = e.target.getAttribute("data-stat");
-                currentData.stats[statName] = e.target.value;
+                currentData.wheelStats[statName] = e.target.value;
                 drawWheel();
-                updateKD();
+                updateModSummary();
             });
         });
     }
-
-    function updateKD() {
-        const grade = currentData.grade;
-        let gradeBonus = grade === "S" ? 6 : grade === "A" ? 4 : grade === "B" ? 2 : grade === "C" ? 0 : grade === "D" ? -1 : -2;
-        let totalPower = 0;
-        let count = 0;
+    
+    // Создание панели характеристик пользователя
+    function buildUserStatsPanel() {
+        const panel = document.getElementById("userStatsPanel");
+        if (!panel) return;
         
-        for (const s of STAT_LABELS) {
-            const val = RANK_VALUES[currentData.stats[s]] || 0;
-            totalPower += val;
-            if (currentData.stats[s] !== "?") count++;
+        panel.innerHTML = "";
+        for (const stat of USER_STATS) {
+            const value = currentData.userStats[stat] || 10;
+            const mod = getModifier(value);
+            const div = document.createElement("div");
+            div.className = "user-stat";
+            div.innerHTML = `
+                <div class="user-stat-name">${stat}</div>
+                <div class="user-stat-value">
+                    <button class="user-dec" data-stat="${stat}">-</button>
+                    <input type="number" id="stat_${stat}" value="${value}" step="1" class="user-stat-input">
+                    <button class="user-inc" data-stat="${stat}">+</button>
+                </div>
+                <div class="user-stat-mod">${mod >= 0 ? `+${mod}` : `${mod}`}</div>
+            `;
+            panel.appendChild(div);
         }
         
-        const avg = count > 0 ? totalPower / count : 0;
-        const kd = Math.floor(avg * 2 + gradeBonus);
-        const kdDisplay = document.getElementById("kdDisplay");
-        if (kdDisplay) {
-            kdDisplay.innerHTML = `🎯 STAND DESTINY: ${kd}  |  GRADE ${grade}  |  WILLPOWER`;
+        // Обработчики для кнопок
+        document.querySelectorAll(".user-dec").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const stat = btn.getAttribute("data-stat");
+                let newVal = (currentData.userStats[stat] || 10) - 1;
+                if (newVal < 1) newVal = 1;
+                currentData.userStats[stat] = newVal;
+                updateUserStatUI(stat);
+                updateModSummary();
+            });
+        });
+        
+        document.querySelectorAll(".user-inc").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const stat = btn.getAttribute("data-stat");
+                let newVal = (currentData.userStats[stat] || 10) + 1;
+                if (newVal > 30) newVal = 30;
+                currentData.userStats[stat] = newVal;
+                updateUserStatUI(stat);
+                updateModSummary();
+            });
+        });
+        
+        document.querySelectorAll(".user-stat-input").forEach(input => {
+            input.addEventListener("change", (e) => {
+                const stat = input.getAttribute("id")?.replace("stat_", "");
+                if (stat) {
+                    let newVal = parseInt(input.value) || 10;
+                    if (newVal < 1) newVal = 1;
+                    if (newVal > 30) newVal = 30;
+                    currentData.userStats[stat] = newVal;
+                    updateUserStatUI(stat);
+                    updateModSummary();
+                }
+            });
+        });
+    }
+    
+    function updateUserStatUI(stat) {
+        const input = document.getElementById(`stat_${stat}`);
+        if (input) input.value = currentData.userStats[stat];
+        const div = input?.closest(".user-stat");
+        if (div) {
+            const modSpan = div.querySelector(".user-stat-mod");
+            if (modSpan) {
+                const mod = getModifier(currentData.userStats[stat]);
+                modSpan.innerText = mod >= 0 ? `+${mod}` : `${mod}`;
+            }
         }
     }
-
+    
+    function updateModSummary() {
+        const mods = [];
+        for (const stat of USER_STATS) {
+            const mod = getModifier(currentData.userStats[stat]);
+            mods.push(`${stat}: ${mod >= 0 ? `+${mod}` : mod}`);
+        }
+        const summary = document.getElementById("modSummary");
+        if (summary) summary.innerHTML = `🎯 Модификаторы: ${mods.join(" | ")}`;
+        
+        // Пересчёт КД/боевых параметров для стенда
+        const standTypeMap = { "close": "Ближняя", "long": "Дальняя", "auto": "Автомат", "radius": "Радиус" };
+        const typeText = standTypeMap[currentData.standType] || "Ближняя";
+        let totalBonus = 0;
+        for (const stat of USER_STATS) totalBonus += getModifier(currentData.userStats[stat]);
+        const avgBonus = Math.floor(totalBonus / USER_STATS.length);
+        
+        const kdDisplay = document.getElementById("kdDisplay");
+        if (kdDisplay) {
+            kdDisplay.innerHTML = `🎯 STAND TYPE: ${typeText}  |  Мод. персонажа: ${avgBonus >= 0 ? `+${avgBonus}` : avgBonus}`;
+        }
+    }
+    
     function updateUIfromData() {
-        const charName = document.getElementById("charName");
-        const grade = document.getElementById("grade");
-        const hp = document.getElementById("hp");
-        const energy = document.getElementById("energy");
-        const hpMax = document.getElementById("hpMax");
-        const energyMax = document.getElementById("energyMax");
+        document.getElementById("charName").value = currentData.name;
+        document.getElementById("hp").value = currentData.hp;
+        document.getElementById("energy").value = currentData.energy;
+        document.getElementById("hpMax").innerText = currentData.hpMax;
+        document.getElementById("energyMax").innerText = currentData.energyMax;
         
-        if (charName) charName.value = currentData.name;
-        if (grade) grade.value = currentData.grade;
-        if (hp) hp.value = currentData.hp;
-        if (energy) energy.value = currentData.energy;
-        if (hpMax) hpMax.innerText = currentData.hpMax;
-        if (energyMax) energyMax.innerText = currentData.energyMax;
+        // Тип стенда
+        const radios = document.querySelectorAll('input[name="standType"]');
+        radios.forEach(radio => {
+            if (radio.value === currentData.standType) radio.checked = true;
+        });
         
-        buildStatControls();
+        buildWheelControls();
+        buildUserStatsPanel();
         drawWheel();
-        updateKD();
+        updateModSummary();
         
+        // Умения
         const skillContainer = document.getElementById("skillList");
         if (skillContainer) {
             skillContainer.innerHTML = "";
@@ -493,9 +665,11 @@
 
     function exportChar() {
         currentData.name = document.getElementById("charName").value;
-        currentData.grade = document.getElementById("grade").value;
         currentData.hp = parseInt(document.getElementById("hp").value) || 0;
         currentData.energy = parseInt(document.getElementById("energy").value) || 0;
+        
+        const typeRadio = document.querySelector('input[name="standType"]:checked');
+        if (typeRadio) currentData.standType = typeRadio.value;
         
         const dataStr = JSON.stringify(currentData, null, 2);
         const blob = new Blob([dataStr], {type: "application/json"});
@@ -511,11 +685,11 @@
         reader.onload = (e) => {
             try {
                 const loaded = JSON.parse(e.target.result);
-                currentData = { ...currentData, ...loaded, stats: { ...currentData.stats, ...loaded.stats } };
+                currentData = { ...currentData, ...loaded, wheelStats: { ...currentData.wheelStats, ...loaded.wheelStats }, userStats: { ...currentData.userStats, ...loaded.userStats } };
                 if (!currentData.skills) currentData.skills = [];
+                if (!currentData.standName) currentData.standName = "";
                 updateUIfromData();
-                const turnMsg = document.getElementById("turnMessage");
-                if (turnMsg) turnMsg.innerHTML = "✅ STAND WHEEL LOADED!";
+                document.getElementById("turnMessage").innerHTML = "✅ STAND LOADED!";
             } catch(err) {
                 alert("Invalid Stand File");
             }
@@ -524,21 +698,22 @@
     }
     
     function resetToEmpty() {
-        const emptyStats = {};
-        STAT_LABELS.forEach(l => emptyStats[l] = "?");
+        const emptyWheel = {};
+        STAT_LABELS.forEach(l => emptyWheel[l] = "?");
+        const emptyUser = {};
+        USER_STATS.forEach(s => emptyUser[s] = 10);
+        
         currentData = {
             name: "",
-            grade: "A",
-            stats: emptyStats,
-            hp: 0,
-            energy: 0,
-            hpMax: 100,
-            energyMax: 100,
+            standName: "",
+            standType: "close",
+            wheelStats: emptyWheel,
+            userStats: emptyUser,
+            hp: 0, energy: 0, hpMax: 100, energyMax: 100,
             skills: []
         };
         updateUIfromData();
-        const turnMsg = document.getElementById("turnMessage");
-        if (turnMsg) turnMsg.innerHTML = "🌀 NEW STAND — ALL PARAMETERS ?";
+        document.getElementById("turnMessage").innerHTML = "🌀 NEW STAND!";
     }
     
     function addSkill() {
@@ -550,8 +725,7 @@
     }
     
     function nextTurn() {
-        const turnMsg = document.getElementById("turnMessage");
-        if (turnMsg) turnMsg.innerHTML = "⚡ ZA WARUDO! TOKI WO TOMARE! ⚡";
+        document.getElementById("turnMessage").innerHTML = "⚡ ZA WARUDO! TOKI WO TOMARE! ⚡";
     }
     
     function removeSkillHandler(e) {
@@ -563,7 +737,16 @@
             }
         }
     }
-
+    
+    // Ввод названия стенда (через двойной клик по canvas)
+    function promptStandName() {
+        const newName = prompt("Enter STAND NAME:", currentData.standName || "My Stand");
+        if (newName !== null) {
+            currentData.standName = newName.trim() || "";
+            drawWheel();
+        }
+    }
+    
     // Инициализация
     window.addEventListener('DOMContentLoaded', () => {
         const exportBtn = document.getElementById("exportBtn");
@@ -574,9 +757,9 @@
         const fileInput = document.getElementById("fileInput");
         const skillList = document.getElementById("skillList");
         const charName = document.getElementById("charName");
-        const grade = document.getElementById("grade");
         const hp = document.getElementById("hp");
         const energy = document.getElementById("energy");
+        const canvasElem = document.getElementById("standWheel");
         
         if (exportBtn) exportBtn.addEventListener("click", exportChar);
         if (importBtn) importBtn.addEventListener("click", () => fileInput.click());
@@ -591,9 +774,20 @@
         }
         if (skillList) skillList.addEventListener("click", removeSkillHandler);
         if (charName) charName.addEventListener("input", (e) => currentData.name = e.target.value);
-        if (grade) grade.addEventListener("change", (e) => { currentData.grade = e.target.value; updateKD(); });
         if (hp) hp.addEventListener("input", (e) => currentData.hp = parseInt(e.target.value) || 0);
         if (energy) energy.addEventListener("input", (e) => currentData.energy = parseInt(e.target.value) || 0);
+        
+        // Название стенда по клику на центр колеса
+        if (canvasElem) canvasElem.addEventListener("dblclick", promptStandName);
+        
+        // Тип стенда
+        const radios = document.querySelectorAll('input[name="standType"]');
+        radios.forEach(radio => {
+            radio.addEventListener("change", (e) => {
+                if (e.target.checked) currentData.standType = e.target.value;
+                updateModSummary();
+            });
+        });
         
         resetToEmpty();
     });
