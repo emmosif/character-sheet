@@ -21,7 +21,7 @@
         }
 
         .container {
-            max-width: 1300px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -51,6 +51,7 @@
             display: flex;
             justify-content: center;
             margin: 30px 0;
+            position: relative;
         }
         
         canvas {
@@ -59,7 +60,7 @@
             box-shadow: 0 0 0 6px #e6b42244, 0 0 0 12px #2c1420, 0 10px 35px black;
             width: 100%;
             height: auto;
-            max-width: 500px;
+            max-width: 600px;
             aspect-ratio: 1/1;
             cursor: pointer;
         }
@@ -76,14 +77,14 @@
             background: #140e16;
             border-left: 6px solid #e6b422;
             padding: 10px 18px;
-            min-width: 130px;
+            min-width: 110px;
             text-align: center;
         }
         
         .stat-label {
             font-weight: bold;
             letter-spacing: 2px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             text-transform: uppercase;
             color: #ffdd99;
         }
@@ -99,7 +100,7 @@
             cursor: pointer;
             font-family: monospace;
             text-align: center;
-            width: 80px;
+            width: 70px;
         }
 
         .other-panel {
@@ -204,9 +205,9 @@
         </div>
     </div>
 
-    <!-- КОЛЕСО СТЕНДА -->
+    <!-- КОЛЕСО СТЕНДА (Дартс + паутина) -->
     <div class="wheel-container">
-        <canvas id="standWheel" width="500" height="500"></canvas>
+        <canvas id="standWheel" width="600" height="600"></canvas>
     </div>
 
     <!-- Панель управления параметрами -->
@@ -231,14 +232,17 @@
 </div>
 
 <script>
-    // Параметры стенда
-    const STAT_LABELS = ["POWER", "SPEED", "PRECISION", "RANGE", "DURABILITY"];
+    // === НАСТРОЙКИ КОЛЕСА ===
+    const STAT_LABELS = ["POWER", "SPEED", "PRECISION", "RANGE", "DURABILITY", "POTENTIAL"];
+    // Ранги: ? (0), E(1), D(2), C(3), B(4), A(5), S(6)
     const RANK_VALUES = {
-        "?": 0, "E": 1, "D": 2, "C": 3, "B": 4, "A": 5
+        "?": 0, "E": 1, "D": 2, "C": 3, "B": 4, "A": 5, "S": 6
     };
-    const RANK_LIST = ["?", "E", "D", "C", "B", "A"];
-
-    // Начальные данные
+    const RANK_LIST = ["?", "E", "D", "C", "B", "A", "S"];
+    
+    // Максимальный уровень (для масштабирования)
+    const MAX_RANK = 6; // S
+    
     let currentData = {
         name: "",
         grade: "A",
@@ -247,7 +251,8 @@
             SPEED: "?",
             PRECISION: "?",
             RANGE: "?",
-            DURABILITY: "?"
+            DURABILITY: "?",
+            POTENTIAL: "?"
         },
         hp: 0,
         energy: 0,
@@ -258,84 +263,147 @@
 
     const canvas = document.getElementById("standWheel");
     let ctx = canvas.getContext("2d");
-
-    // Функция отрисовки колеса
+    
+    // Функция отрисовки колеса (как в дартс + паутина)
     function drawWheel() {
-        if (!ctx) {
-            console.error("Canvas context not found");
-            return;
-        }
+        if (!ctx) return;
         
         const w = canvas.width;
         const h = canvas.height;
-        const centerX = w/2;
-        const centerY = h/2;
-        const radius = w * 0.38;
+        const centerX = w / 2;
+        const centerY = h / 2;
+        const outerRadius = w * 0.42;      // внешняя окружность
+        const innerRadius = w * 0.12;       // внутренняя окружность (центр)
         const angleStep = (Math.PI * 2) / STAT_LABELS.length;
         
         ctx.clearRect(0, 0, w, h);
         
-        for (let i = 0; i < STAT_LABELS.length; i++) {
-            const statKey = STAT_LABELS[i];
-            const rank = currentData.stats[statKey] || "?";
-            const value = RANK_VALUES[rank] || 0;
-            const intensity = value / 5;
-            
-            // Цвет сектора
-            const r = 180 + Math.floor(75 * intensity);
-            const g = 80 + Math.floor(130 * intensity);
-            const b = 60 + Math.floor(70 * intensity);
-            const fillColor = `rgba(${r}, ${g}, ${b}, 0.85)`;
-            
-            const startAngle = i * angleStep - Math.PI/2;
-            const endAngle = (i+1) * angleStep - Math.PI/2;
-            
-            // Рисуем сектор
-            ctx.beginPath();
-            ctx.moveTo(centerX, centerY);
-            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-            ctx.fillStyle = fillColor;
-            ctx.fill();
-            ctx.strokeStyle = "#e6b422";
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            
-            // Рисуем линии
-            ctx.beginPath();
-            ctx.moveTo(centerX, centerY);
-            ctx.lineTo(centerX + Math.cos(startAngle) * radius, centerY + Math.sin(startAngle) * radius);
-            ctx.strokeStyle = "#e6b42266";
-            ctx.stroke();
-            
-            // Название стата
-            const midAngle = startAngle + angleStep/2;
-            const textRadius = radius + 22;
-            const xText = centerX + Math.cos(midAngle) * textRadius;
-            const yText = centerY + Math.sin(midAngle) * textRadius;
-            ctx.font = "bold 14px 'Oswald'";
-            ctx.fillStyle = "#ffeaae";
-            ctx.fillText(STAT_LABELS[i], xText - 20, yText + 5);
-            
-            // Значение ранга
-            const innerR = radius * 0.6;
-            const xRank = centerX + Math.cos(midAngle) * innerR;
-            const yRank = centerY + Math.sin(midAngle) * innerR;
-            ctx.font = "bold 24px 'Special Elite'";
-            ctx.fillStyle = (rank === "?") ? "#bbbbcc" : "#ffd966";
-            ctx.fillText(rank, xRank - 10, yRank + 8);
-        }
-        
-        // Центральный круг
+        // === 1. Рисуем внешнюю окружность (дартс) ===
         ctx.beginPath();
-        ctx.arc(centerX, centerY, radius * 0.28, 0, 2 * Math.PI);
-        ctx.fillStyle = "#0a0412";
-        ctx.fill();
+        ctx.arc(centerX, centerY, outerRadius, 0, 2 * Math.PI);
         ctx.strokeStyle = "#e6b422";
         ctx.lineWidth = 3;
         ctx.stroke();
-        ctx.font = "bold 14px 'Oswald'";
+        
+        // === 2. Рисуем внутреннюю окружность ===
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI);
+        ctx.strokeStyle = "#e6b42288";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        // === 3. Рисуем линии от центра к краю и чёрточки ===
+        for (let i = 0; i < STAT_LABELS.length; i++) {
+            const angle = i * angleStep - Math.PI / 2; // чтобы первый был вверху
+            const endX = centerX + Math.cos(angle) * outerRadius;
+            const endY = centerY + Math.sin(angle) * outerRadius;
+            
+            // Линия от центра до внешней окружности
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(endX, endY);
+            ctx.strokeStyle = "#e6b42266";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            
+            // Рисуем 6 чёрточек (для уровней E, D, C, B, A, S)
+            for (let level = 1; level <= 6; level++) {
+                const t = level / 6; // от центра (0) до края (1)
+                const radius = innerRadius + (outerRadius - innerRadius) * t;
+                const lineX = centerX + Math.cos(angle) * radius;
+                const lineY = centerY + Math.sin(angle) * radius;
+                
+                // Перпендикулярная чёрточка
+                const perpAngle = angle + Math.PI / 2;
+                const tickLength = 6;
+                const tickX1 = lineX + Math.cos(perpAngle) * tickLength;
+                const tickY1 = lineY + Math.sin(perpAngle) * tickLength;
+                const tickX2 = lineX - Math.cos(perpAngle) * tickLength;
+                const tickY2 = lineY - Math.sin(perpAngle) * tickLength;
+                
+                ctx.beginPath();
+                ctx.moveTo(tickX1, tickY1);
+                ctx.lineTo(tickX2, tickY2);
+                ctx.strokeStyle = "#ffdd99";
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+            }
+            
+            // === Название стата снаружи ===
+            const labelRadius = outerRadius + 18;
+            const labelX = centerX + Math.cos(angle) * labelRadius;
+            const labelY = centerY + Math.sin(angle) * labelRadius;
+            ctx.font = "bold 12px 'Oswald'";
+            ctx.fillStyle = "#ffeaae";
+            ctx.fillText(STAT_LABELS[i], labelX - 20, labelY + 5);
+            
+            // === Буква уровня стата (крупная) под названием ===
+            const rank = currentData.stats[STAT_LABELS[i]] || "?";
+            const letterRadius = outerRadius + 38;
+            const letterX = centerX + Math.cos(angle) * letterRadius;
+            const letterY = centerY + Math.sin(angle) * letterRadius;
+            ctx.font = "bold 20px 'Special Elite'";
+            ctx.fillStyle = (rank === "?") ? "#bbbbcc" : "#ffd966";
+            ctx.fillText(rank, letterX - 12, letterY + 8);
+        }
+        
+        // === 4. РИСУЕМ УЗОР (паутину) по выбранным статам ===
+        const points = [];
+        for (let i = 0; i < STAT_LABELS.length; i++) {
+            const rank = currentData.stats[STAT_LABELS[i]] || "?";
+            let value = RANK_VALUES[rank];
+            if (value === undefined) value = 0;
+            
+            // Расстояние от центра: 0 = центр, 1 = край внешней окружности
+            let t;
+            if (value === 0) {
+                t = 0; // "?" — остаётся в центре
+            } else {
+                t = (value / MAX_RANK); // E=1/6, D=2/6... S=6/6
+            }
+            
+            const radius = innerRadius + (outerRadius - innerRadius) * t;
+            const angle = i * angleStep - Math.PI / 2;
+            const x = centerX + Math.cos(angle) * radius;
+            const y = centerY + Math.sin(angle) * radius;
+            points.push({x, y});
+        }
+        
+        // Рисуем замкнутую линию (узор)
+        if (points.length > 0) {
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            for (let i = 1; i < points.length; i++) {
+                ctx.lineTo(points[i].x, points[i].y);
+            }
+            ctx.closePath();
+            ctx.fillStyle = "#e6b42255";
+            ctx.fill();
+            ctx.strokeStyle = "#ffcc66";
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            
+            // Рисуем точки на узлах
+            for (let p of points) {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 5, 0, 2 * Math.PI);
+                ctx.fillStyle = "#ffaa33";
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+        
+        // === 5. Центральный круг с логотипом ===
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, innerRadius - 5, 0, 2 * Math.PI);
+        ctx.fillStyle = "#0a0412";
+        ctx.fill();
+        ctx.strokeStyle = "#e6b422";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.font = "bold 12px 'Oswald'";
         ctx.fillStyle = "#e6b422";
-        ctx.fillText("STAND", centerX - 28, centerY + 6);
+        ctx.fillText("STAND", centerX - 24, centerY + 5);
     }
 
     // Создание панели управления
@@ -357,7 +425,7 @@
             panel.appendChild(div);
         }
         
-        // Добавляем обработчики
+        // Обработчики изменения
         document.querySelectorAll(".stat-value-select").forEach(select => {
             select.addEventListener("change", (e) => {
                 const statName = e.target.getAttribute("data-stat");
@@ -407,7 +475,6 @@
         drawWheel();
         updateKD();
         
-        // Обновляем умения
         const skillContainer = document.getElementById("skillList");
         if (skillContainer) {
             skillContainer.innerHTML = "";
@@ -424,7 +491,6 @@
         }
     }
 
-    // Экспорт, импорт, сброс
     function exportChar() {
         currentData.name = document.getElementById("charName").value;
         currentData.grade = document.getElementById("grade").value;
@@ -498,9 +564,8 @@
         }
     }
 
-    // Инициализация после загрузки страницы
+    // Инициализация
     window.addEventListener('DOMContentLoaded', () => {
-        // Настройка обработчиков
         const exportBtn = document.getElementById("exportBtn");
         const importBtn = document.getElementById("importBtn");
         const resetBtn = document.getElementById("resetBtn");
@@ -530,7 +595,6 @@
         if (hp) hp.addEventListener("input", (e) => currentData.hp = parseInt(e.target.value) || 0);
         if (energy) energy.addEventListener("input", (e) => currentData.energy = parseInt(e.target.value) || 0);
         
-        // Запускаем отрисовку
         resetToEmpty();
     });
 </script>
