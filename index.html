@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>JOJO — STAND WHEEL | Анкета персонажа</title>
+    <title>JOJO — STAND SYSTEM | Анкета персонажа</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Special+Elite&display=swap');
 
@@ -21,7 +21,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
@@ -47,28 +47,32 @@
             box-shadow: 6px 6px 0 #4a1818;
         }
 
-        .two-columns {
+        .three-columns {
             display: flex;
             flex-wrap: wrap;
-            gap: 30px;
+            gap: 25px;
             margin-top: 20px;
         }
         
-        .wheel-section {
-            flex: 1.5;
-            min-width: 350px;
+        .wheel-col {
+            flex: 1.2;
+            min-width: 320px;
         }
         
-        .stats-section {
-            flex: 1;
-            min-width: 280px;
+        .skills-col {
+            flex: 1.5;
+            min-width: 300px;
+        }
+        
+        .combat-col {
+            flex: 0.9;
+            min-width: 250px;
         }
 
         .wheel-container {
             display: flex;
             justify-content: center;
-            margin: 20px 0;
-            position: relative;
+            margin: 15px 0;
         }
         
         canvas {
@@ -77,48 +81,47 @@
             box-shadow: 0 0 0 6px #e6b42244, 0 0 0 12px #2c1420, 0 10px 35px black;
             width: 100%;
             height: auto;
-            max-width: 550px;
+            max-width: 450px;
             aspect-ratio: 1/1;
             cursor: pointer;
         }
 
         .stand-type-selector {
             background: #140e16;
-            padding: 15px;
+            padding: 12px;
             margin: 15px 0;
             border-left: 6px solid #e6b422;
         }
         
         .stand-type-selector label {
-            margin-right: 20px;
+            margin-right: 15px;
             cursor: pointer;
+            font-size: 0.85rem;
         }
         
         .stand-type-selector input {
-            margin-right: 5px;
-            cursor: pointer;
+            margin-right: 4px;
         }
 
         .stats-control-wheel {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
+            gap: 10px;
+            margin: 15px 0;
         }
         
         .stat-control-item {
             background: #140e16;
-            border-left: 6px solid #e6b422;
-            padding: 8px 12px;
-            min-width: 100px;
+            border-left: 4px solid #e6b422;
+            padding: 5px 8px;
+            min-width: 80px;
             text-align: center;
         }
         
         .stat-label {
             font-weight: bold;
-            letter-spacing: 2px;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             color: #ffdd99;
         }
@@ -127,31 +130,30 @@
             background: #241e28;
             color: #ffcd7e;
             border: 1px solid #e6b422;
-            padding: 5px 10px;
-            font-size: 1.1rem;
+            padding: 3px 6px;
+            font-size: 0.9rem;
             font-weight: bold;
-            margin-top: 6px;
-            cursor: pointer;
-            width: 65px;
+            margin-top: 4px;
+            width: 55px;
         }
 
-        /* Характеристики пользователя (D&D стиль) */
+        /* Характеристики юзера */
         .user-stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin: 15px 0;
+            gap: 8px;
+            margin: 12px 0;
         }
         
         .user-stat {
             background: #0e0a12;
-            padding: 8px;
+            padding: 5px;
             text-align: center;
             border-bottom: 2px solid #e6b422;
         }
         
         .user-stat-name {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             color: #ffdd99;
         }
@@ -160,176 +162,240 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            margin: 5px 0;
+            gap: 5px;
+            margin: 3px 0;
         }
         
         .user-stat-value input {
-            width: 55px;
+            width: 45px;
             text-align: center;
-            font-size: 1rem;
+            font-size: 0.9rem;
             background: #1f1824;
             border: 1px solid #e6b422;
             color: #ffeaac;
-            padding: 4px;
-        }
-        
-        .user-stat-mod {
-            font-size: 0.9rem;
-            color: #ffaa66;
-            font-weight: bold;
+            padding: 2px;
         }
         
         .user-stat-buttons button {
             background: #2e1e26;
             border: 1px solid #e6b422;
             color: #ffeaac;
-            width: 24px;
+            width: 22px;
             cursor: pointer;
             font-weight: bold;
         }
 
-        .other-panel {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 25px;
+        /* Сетка навыков */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin: 12px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
         }
         
-        .info-area {
-            flex: 1;
-            background: #0c0812cc;
-            padding: 15px;
-            backdrop-filter: blur(4px);
+        .skill-card {
+            background: #0e0a12cc;
+            padding: 6px 8px;
+            border-left: 3px solid #e6b422;
+            font-size: 0.8rem;
+        }
+        
+        .skill-name {
+            font-weight: bold;
+            color: #ffdd99;
+            font-size: 0.8rem;
+        }
+        
+        .skill-value {
+            font-family: monospace;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #ffcc66;
+            margin-top: 3px;
+        }
+        
+        .combat-stat {
+            background: #0e0a12;
+            padding: 8px;
+            margin: 8px 0;
+            text-align: center;
+            border-left: 4px solid #e6b422;
+        }
+        
+        .combat-stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffaa44;
         }
         
         .resource {
-            margin: 10px 0;
+            margin: 8px 0;
         }
         
         .resource input {
             background: #1f1722;
             border: none;
             border-bottom: 2px solid #e6b422;
-            width: 70px;
-            font-size: 1.1rem;
+            width: 65px;
+            font-size: 1rem;
             color: #ffdfaa;
             font-weight: bold;
-        }
-        
-        .kd-stand {
-            background: #00000077;
-            padding: 10px;
-            border-left: 5px solid #e6b422;
-            font-family: monospace;
-            margin: 12px 0;
         }
         
         .jojo-btn {
             background: #2e1e26;
             border: 1px solid #e6b422;
             color: #ffeaac;
-            padding: 6px 15px;
+            padding: 5px 12px;
             font-weight: bold;
-            letter-spacing: 1px;
             cursor: pointer;
             transition: 0.15s;
             margin: 3px;
+            font-size: 0.8rem;
         }
         
         .jojo-btn:hover {
             background: #e6b422;
             color: #150e18;
-            transform: scale(0.97);
         }
         
         .skill-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
             margin: 10px 0;
         }
         
         .skill-tag {
             background: #1f1822;
-            border-right: 4px solid #e6b422;
-            padding: 4px 12px;
-            font-size: 0.9rem;
-        }
-        
-        input, select {
-            background: #1f1824;
-            border: 1px solid #e6b422;
-            color: #ffeaac;
-            padding: 5px;
+            border-right: 3px solid #e6b422;
+            padding: 3px 10px;
+            font-size: 0.8rem;
         }
         
         h3 {
             border-left: 6px solid #e6b422;
-            padding-left: 12px;
-            margin: 12px 0 8px;
-            font-size: 1.2rem;
+            padding-left: 10px;
+            margin: 10px 0 8px;
+            font-size: 1.1rem;
         }
         
         h4 {
             color: #ffdd99;
-            margin: 10px 0 5px;
-            font-size: 1rem;
+            margin: 8px 0 4px;
+            font-size: 0.9rem;
+        }
+        
+        .weapon-select {
+            background: #1f1824;
+            border: 1px solid #e6b422;
+            color: #ffeaac;
+            padding: 3px;
+            margin: 5px 0;
+            width: 100%;
+        }
+        
+        .small-text {
+            font-size: 0.7rem;
+            color: #aa8866;
         }
     </style>
 </head>
 <body>
 <div class="container">
 <div class="stand-card">
-    <div class="jojo-tag">🌟 STAND WHEEL 🌟</div>
+    <div class="jojo-tag">🌟 STAND SYSTEM 🌟</div>
 
-    <div style="display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 15px;">
-        <button class="jojo-btn" id="exportBtn">💾 SAVE STAND</button>
-        <button class="jojo-btn" id="importBtn">📂 LOAD STAND</button>
+    <div style="display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 10px;">
+        <button class="jojo-btn" id="exportBtn">💾 SAVE</button>
+        <button class="jojo-btn" id="importBtn">📂 LOAD</button>
         <button class="jojo-btn" id="resetBtn">🌀 RESET</button>
         <input type="file" id="fileInput" style="display:none" accept=".json">
     </div>
 
-    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin: 10px 0;">
-        <div><label>🔮 USER NAME</label><br><input type="text" id="charName" placeholder="Joestar" style="width:180px"></div>
+    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin: 5px 0;">
+        <div><label>🔮 USER NAME</label><br><input type="text" id="charName" placeholder="Joestar" style="width:160px"></div>
     </div>
 
-    <div class="two-columns">
-        <!-- ЛЕВАЯ КОЛОНКА: КОЛЕСО СТЕНДА -->
-        <div class="wheel-section">
+    <div class="three-columns">
+        <!-- КОЛОНКА 1: КОЛЕСО СТЕНДА -->
+        <div class="wheel-col">
             <div class="wheel-container">
-                <canvas id="standWheel" width="550" height="550"></canvas>
+                <canvas id="standWheel" width="450" height="450"></canvas>
             </div>
             
-            <!-- Тип стенда вместо грейда -->
             <div class="stand-type-selector">
                 <h4>⭐ STAND TYPE</h4>
-                <label><input type="radio" name="standType" value="close"> Ближняя дистанция</label>
-                <label><input type="radio" name="standType" value="long"> Дальняя дистанция</label>
-                <label><input type="radio" name="standType" value="auto"> Автоматический</label>
-                <label><input type="radio" name="standType" value="radius"> Радиус неуместен</label>
+                <label><input type="radio" name="standType" value="close"> Ближняя</label>
+                <label><input type="radio" name="standType" value="long"> Дальняя</label>
+                <label><input type="radio" name="standType" value="auto"> Автомат</label>
+                <label><input type="radio" name="standType" value="radius"> Радиус</label>
             </div>
             
-            <!-- Управление параметрами колеса -->
             <div class="stats-control-wheel" id="statsControlPanel"></div>
         </div>
         
-        <!-- ПРАВАЯ КОЛОНКА: ХАРАКТЕРИСТИКИ ЮЗЕРА -->
-        <div class="stats-section">
-            <h3>⚡ USER STATS (D&D)</h3>
+        <!-- КОЛОНКА 2: ХАРАКТЕРИСТИКИ И НАВЫКИ -->
+        <div class="skills-col">
+            <h3>⚡ USER STATS</h3>
             <div class="user-stats-grid" id="userStatsPanel"></div>
-            <div class="kd-stand" id="modSummary">🎯 Модификаторы: </div>
             
+            <h3>🎯 SKILLS</h3>
+            <div class="skills-grid" id="skillsPanel"></div>
+        </div>
+        
+        <!-- КОЛОНКА 3: БОЕВЫЕ ПАРАМЕТРЫ -->
+        <div class="combat-col">
             <h3>❤️ BATTLE STATUS</h3>
-            <div class="resource">HP: <input type="number" id="hp" value="0"> / <span id="hpMax">100</span></div>
+            <div class="resource">HP: <input type="number" id="hp" value="0"> / <span id="hpMax">0</span></div>
             <div class="resource">STAND ENERGY: <input type="number" id="energy" value="0"> / <span id="energyMax">100</span></div>
             
-            <h3>🌀 STAND ABILITIES</h3>
-            <div id="skillList" class="skill-list"></div>
-            <button class="jojo-btn" id="addSkillBtn">➕ ADD ABILITY</button>
+            <div class="combat-stat">
+                <div>🛡️ КД (Защита)</div>
+                <div class="combat-stat-value" id="kdValue">0</div>
+            </div>
+            <div class="combat-stat">
+                <div>⚡ Реакция</div>
+                <div class="combat-stat-value" id="reactionValue">0</div>
+            </div>
+            <div class="combat-stat">
+                <div>🧠 Воля</div>
+                <div class="combat-stat-value" id="willValue">0</div>
+            </div>
             
-            <button class="jojo-btn" id="nextTurnBtn" style="width:100%; margin-top:15px;">⚡ THE WORLD! NEXT TURN ⚡</button>
-            <div id="turnMessage" style="text-align:center; margin-top:8px;">—— ORA ORA ——</div>
+            <h4>🗡️ БЛИЖНИЙ БОЙ</h4>
+            <select id="meleeType" class="weapon-select">
+                <option value="strength">Силовое оружие (Сила)</option>
+                <option value="agility">Ловкость оружие (Управление)</option>
+            </select>
+            <div class="combat-stat">
+                <div>Ближний бой</div>
+                <div class="combat-stat-value" id="meleeValue">0</div>
+                <div class="small-text">+бонус мастерства (+2)</div>
+            </div>
+            
+            <h4>🏹 ДАЛЬНИЙ БОЙ</h4>
+            <div class="combat-stat">
+                <div>Дальний бой</div>
+                <div class="combat-stat-value" id="rangedValue">0</div>
+                <div class="small-text">+бонус мастерства (если есть оружие)</div>
+            </div>
+            <label style="font-size:0.75rem"><input type="checkbox" id="rangedProf"> Владение оружием (+2)</label>
+            
+            <div class="combat-stat">
+                <div>🎯 Модификатор стенда</div>
+                <div class="combat-stat-value" id="standMod">0</div>
+            </div>
+            
+            <h3>🌀 ABILITIES</h3>
+            <div id="skillList" class="skill-list"></div>
+            <button class="jojo-btn" id="addSkillBtn" style="width:100%">➕ ADD ABILITY</button>
+            
+            <button class="jojo-btn" id="nextTurnBtn" style="width:100%; margin-top:12px;">⚡ NEXT TURN ⚡</button>
+            <div id="turnMessage" style="text-align:center; margin-top:6px; font-size:0.8rem;">—— ORA ORA ——</div>
         </div>
     </div>
 </div>
@@ -342,309 +408,122 @@
     const RANK_LIST = ["?", "E", "D", "C", "B", "A", "S"];
     const MAX_RANK = 6;
     
-    // Характеристики пользователя (D&D стиль)
-    const USER_STATS = ["Сила", "Управление", "Телосложение", "Память", "Интеллект", "Восприятие", "Харизма", "Манипуляция", "Притворство"];
+    // Характеристики пользователя (9 штук)
+    const USER_STATS = ["Сила", "Управление", "Телосложение", "Память", "Мышление", "Восприятие", "Харизма", "Манипуляция", "Притворство"];
     
+    // Базовые значения
     let currentData = {
         name: "",
         standName: "",
         standType: "close",
-        wheelStats: {
-            POWER: "?",
-            SPEED: "?",
-            PRECISION: "?",
-            RANGE: "?",
-            DURABILITY: "?",
-            POTENTIAL: "?"
-        },
+        wheelStats: { POWER: "?", SPEED: "?", PRECISION: "?", RANGE: "?", DURABILITY: "?", POTENTIAL: "?" },
         userStats: {
             "Сила": 10, "Управление": 10, "Телосложение": 10,
-            "Память": 10, "Интеллект": 10, "Восприятие": 10,
+            "Память": 10, "Мышление": 10, "Восприятие": 10,
             "Харизма": 10, "Манипуляция": 10, "Притворство": 10
         },
-        hp: 0, energy: 0, hpMax: 100, energyMax: 100,
+        hp: 0, energy: 0, hpMax: 0, energyMax: 100,
         skills: []
     };
 
-    const canvas = document.getElementById("standWheel");
-    let ctx = canvas.getContext("2d");
+    // Функция получения модификатора (D&D стиль)
+    function getMod(value) { return Math.floor((value - 10) / 2); }
     
-    // Вычисление модификатора (как в D&D: (значение-10)/2, округление вниз)
-    function getModifier(value) {
-        return Math.floor((value - 10) / 2);
+    // === ФОРМУЛЫ НАВЫКОВ ===
+    function calculateSkills() {
+        const u = currentData.userStats;
+        const mod = (s) => getMod(u[s]);
+        
+        return {
+            "Атлетика": mod("Управление") + mod("Сила"),
+            "Координация": mod("Управление"),
+            "Точность": mod("Восприятие"),
+            "Крепость Тела": mod("Телосложение") + mod("Сила"),
+            "Иммунитет": mod("Телосложение") + mod("Сила"),
+            "Логическое мышление": mod("Память") + mod("Мышление"),
+            "Образное мышление": mod("Память") + mod("Восприятие"),
+            "Внимательность": mod("Восприятие"),
+            "Проницательность": mod("Харизма"),
+            "Обаяние": mod("Харизма"),
+            "Принуждение": mod("Манипуляция"),
+            "Запугивание": Math.max(mod("Манипуляция"), mod("Сила")),
+            "Убеждение": Math.max(mod("Харизма"), mod("Манипуляция")),
+            "Обман": mod("Притворство"),
+            "Изображение": mod("Притворство")
+        };
     }
     
-    // Отрисовка колеса с центром для названия стенда
-    function drawWheel() {
-        if (!ctx) return;
+    // === БОЕВЫЕ ПАРАМЕТРЫ ===
+    function calculateCombat() {
+        const u = currentData.userStats;
+        const skills = calculateSkills();
         
-        const w = canvas.width;
-        const h = canvas.height;
-        const centerX = w / 2;
-        const centerY = h / 2;
-        const outerRadius = w * 0.42;
-        const innerRadius = w * 0.12;
-        const angleStep = (Math.PI * 2) / STAT_LABELS.length;
-        
-        ctx.clearRect(0, 0, w, h);
-        
-        // Внешняя окружность
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, outerRadius, 0, 2 * Math.PI);
-        ctx.strokeStyle = "#e6b422";
-        ctx.lineWidth = 3;
-        ctx.stroke();
-        
-        // Внутренняя окружность
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI);
-        ctx.strokeStyle = "#e6b42288";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        
-        // Линии и чёрточки
-        for (let i = 0; i < STAT_LABELS.length; i++) {
-            const angle = i * angleStep - Math.PI / 2;
-            const endX = centerX + Math.cos(angle) * outerRadius;
-            const endY = centerY + Math.sin(angle) * outerRadius;
-            
-            ctx.beginPath();
-            ctx.moveTo(centerX, centerY);
-            ctx.lineTo(endX, endY);
-            ctx.strokeStyle = "#e6b42266";
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-            
-            // Чёрточки для уровней
-            for (let level = 1; level <= 6; level++) {
-                const t = level / 6;
-                const radius = innerRadius + (outerRadius - innerRadius) * t;
-                const lineX = centerX + Math.cos(angle) * radius;
-                const lineY = centerY + Math.sin(angle) * radius;
-                const perpAngle = angle + Math.PI / 2;
-                const tickLength = 5;
-                const tickX1 = lineX + Math.cos(perpAngle) * tickLength;
-                const tickY1 = lineY + Math.sin(perpAngle) * tickLength;
-                const tickX2 = lineX - Math.cos(perpAngle) * tickLength;
-                const tickY2 = lineY - Math.sin(perpAngle) * tickLength;
-                
-                ctx.beginPath();
-                ctx.moveTo(tickX1, tickY1);
-                ctx.lineTo(tickX2, tickY2);
-                ctx.strokeStyle = "#ffdd99";
-                ctx.lineWidth = 1.2;
-                ctx.stroke();
-            }
-            
-            // Название стата
-            const labelRadius = outerRadius + 18;
-            const labelX = centerX + Math.cos(angle) * labelRadius;
-            const labelY = centerY + Math.sin(angle) * labelRadius;
-            ctx.font = "bold 11px 'Oswald'";
-            ctx.fillStyle = "#ffeaae";
-            ctx.fillText(STAT_LABELS[i], labelX - 18, labelY + 4);
-            
-            // Буква уровня
-            const rank = currentData.wheelStats[STAT_LABELS[i]] || "?";
-            const letterRadius = outerRadius + 35;
-            const letterX = centerX + Math.cos(angle) * letterRadius;
-            const letterY = centerY + Math.sin(angle) * letterRadius;
-            ctx.font = "bold 18px 'Special Elite'";
-            ctx.fillStyle = (rank === "?") ? "#bbbbcc" : "#ffd966";
-            ctx.fillText(rank, letterX - 10, letterY + 7);
+        // ОЗ: мод телосложения * 10 + крепость тела
+        const hpMod = getMod(u["Телосложение"]);
+        const крепость = skills["Крепость Тела"];
+        const maxHp = hpMod * 10 + крепость;
+        if (currentData.hpMax !== maxHp) {
+            currentData.hpMax = maxHp;
+            if (currentData.hp > maxHp) currentData.hp = maxHp;
+            document.getElementById("hpMax").innerText = maxHp;
+            document.getElementById("hp").value = currentData.hp;
         }
         
-        // Узор-паутина
-        const points = [];
-        for (let i = 0; i < STAT_LABELS.length; i++) {
-            const rank = currentData.wheelStats[STAT_LABELS[i]] || "?";
-            let value = RANK_VALUES[rank] || 0;
-            let t = (value === 0) ? 0 : (value / MAX_RANK);
-            const radius = innerRadius + (outerRadius - innerRadius) * t;
-            const angle = i * angleStep - Math.PI / 2;
-            const x = centerX + Math.cos(angle) * radius;
-            const y = centerY + Math.sin(angle) * radius;
-            points.push({x, y});
+        // КД: Сила/Управление/Телосложение (как понятно)
+        const kd = 10 + getMod(u["Сила"]) + getMod(u["Управление"]) + getMod(u["Телосложение"]);
+        
+        // Реакция: Управление + Точность
+        const reaction = getMod(u["Управление"]) + skills["Точность"];
+        
+        // Воля: Мышление + Память
+        const will = getMod(u["Мышление"]) + getMod(u["Память"]);
+        
+        // Ближний бой
+        const meleeType = document.getElementById("meleeType")?.value || "strength";
+        const meleeStat = meleeType === "strength" ? getMod(u["Сила"]) : getMod(u["Управление"]);
+        const melee = meleeStat + getMod(u["Телосложение"]) + 2; // +2 бонус мастерства
+        
+        // Дальний бой
+        const rangedProf = document.getElementById("rangedProf")?.checked ? 2 : 0;
+        const ranged = skills["Точность"] + getMod(u["Восприятие"]) + rangedProf;
+        
+        // Модификатор стенда (среднее по колесу)
+        let totalRank = 0, countRank = 0;
+        for (let s of STAT_LABELS) {
+            const val = RANK_VALUES[currentData.wheelStats[s]] || 0;
+            if (val > 0) { totalRank += val; countRank++; }
         }
+        const standMod = countRank > 0 ? Math.floor(totalRank / countRank) - 3 : 0;
         
-        if (points.length > 0) {
-            ctx.beginPath();
-            ctx.moveTo(points[0].x, points[0].y);
-            for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
-            ctx.closePath();
-            ctx.fillStyle = "#e6b42255";
-            ctx.fill();
-            ctx.strokeStyle = "#ffcc66";
-            ctx.lineWidth = 2.5;
-            ctx.stroke();
-            
-            for (let p of points) {
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, 4, 0, 2 * Math.PI);
-                ctx.fillStyle = "#ffaa33";
-                ctx.fill();
-            }
-        }
-        
-        // Центральный круг с полем для названия стенда (рисуем как поле)
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, innerRadius - 3, 0, 2 * Math.PI);
-        ctx.fillStyle = "#0a0412";
-        ctx.fill();
-        ctx.strokeStyle = "#e6b422";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        
-        // Текст названия стенда (если есть)
-        ctx.font = "bold 10px 'Oswald'";
-        ctx.fillStyle = "#e6b422";
-        let standDisplay = currentData.standName || "STAND";
-        if (standDisplay.length > 12) standDisplay = standDisplay.slice(0, 10) + "..";
-        ctx.fillText(standDisplay, centerX - 25, centerY + 4);
-    }
-
-    // Создание панели управления колесом
-    function buildWheelControls() {
-        const panel = document.getElementById("statsControlPanel");
-        if (!panel) return;
-        
-        panel.innerHTML = "";
-        for (const label of STAT_LABELS) {
-            const currentVal = currentData.wheelStats[label] || "?";
-            const div = document.createElement("div");
-            div.className = "stat-control-item";
-            div.innerHTML = `
-                <div class="stat-label">${label}</div>
-                <select class="stat-value-select" data-stat="${label}">
-                    ${RANK_LIST.map(r => `<option value="${r}" ${currentVal === r ? 'selected' : ''}>${r}</option>`).join('')}
-                </select>
-            `;
-            panel.appendChild(div);
-        }
-        
-        document.querySelectorAll(".stat-value-select").forEach(select => {
-            select.addEventListener("change", (e) => {
-                const statName = e.target.getAttribute("data-stat");
-                currentData.wheelStats[statName] = e.target.value;
-                drawWheel();
-                updateModSummary();
-            });
-        });
+        return { kd, reaction, will, melee, ranged, standMod, maxHp, крепость };
     }
     
-    // Создание панели характеристик пользователя
-    function buildUserStatsPanel() {
-        const panel = document.getElementById("userStatsPanel");
-        if (!panel) return;
-        
-        panel.innerHTML = "";
-        for (const stat of USER_STATS) {
-            const value = currentData.userStats[stat] || 10;
-            const mod = getModifier(value);
-            const div = document.createElement("div");
-            div.className = "user-stat";
-            div.innerHTML = `
-                <div class="user-stat-name">${stat}</div>
-                <div class="user-stat-value">
-                    <button class="user-dec" data-stat="${stat}">-</button>
-                    <input type="number" id="stat_${stat}" value="${value}" step="1" class="user-stat-input">
-                    <button class="user-inc" data-stat="${stat}">+</button>
-                </div>
-                <div class="user-stat-mod">${mod >= 0 ? `+${mod}` : `${mod}`}</div>
-            `;
-            panel.appendChild(div);
-        }
-        
-        // Обработчики для кнопок
-        document.querySelectorAll(".user-dec").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                const stat = btn.getAttribute("data-stat");
-                let newVal = (currentData.userStats[stat] || 10) - 1;
-                if (newVal < 1) newVal = 1;
-                currentData.userStats[stat] = newVal;
-                updateUserStatUI(stat);
-                updateModSummary();
-            });
-        });
-        
-        document.querySelectorAll(".user-inc").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                const stat = btn.getAttribute("data-stat");
-                let newVal = (currentData.userStats[stat] || 10) + 1;
-                if (newVal > 30) newVal = 30;
-                currentData.userStats[stat] = newVal;
-                updateUserStatUI(stat);
-                updateModSummary();
-            });
-        });
-        
-        document.querySelectorAll(".user-stat-input").forEach(input => {
-            input.addEventListener("change", (e) => {
-                const stat = input.getAttribute("id")?.replace("stat_", "");
-                if (stat) {
-                    let newVal = parseInt(input.value) || 10;
-                    if (newVal < 1) newVal = 1;
-                    if (newVal > 30) newVal = 30;
-                    currentData.userStats[stat] = newVal;
-                    updateUserStatUI(stat);
-                    updateModSummary();
-                }
-            });
-        });
-    }
-    
-    function updateUserStatUI(stat) {
-        const input = document.getElementById(`stat_${stat}`);
-        if (input) input.value = currentData.userStats[stat];
-        const div = input?.closest(".user-stat");
-        if (div) {
-            const modSpan = div.querySelector(".user-stat-mod");
-            if (modSpan) {
-                const mod = getModifier(currentData.userStats[stat]);
-                modSpan.innerText = mod >= 0 ? `+${mod}` : `${mod}`;
-            }
-        }
-    }
-    
-    function updateModSummary() {
-        const mods = [];
-        for (const stat of USER_STATS) {
-            const mod = getModifier(currentData.userStats[stat]);
-            mods.push(`${stat}: ${mod >= 0 ? `+${mod}` : mod}`);
-        }
-        const summary = document.getElementById("modSummary");
-        if (summary) summary.innerHTML = `🎯 Модификаторы: ${mods.join(" | ")}`;
-        
-        // Пересчёт КД/боевых параметров для стенда
-        const standTypeMap = { "close": "Ближняя", "long": "Дальняя", "auto": "Автомат", "radius": "Радиус" };
-        const typeText = standTypeMap[currentData.standType] || "Ближняя";
-        let totalBonus = 0;
-        for (const stat of USER_STATS) totalBonus += getModifier(currentData.userStats[stat]);
-        const avgBonus = Math.floor(totalBonus / USER_STATS.length);
-        
-        const kdDisplay = document.getElementById("kdDisplay");
-        if (kdDisplay) {
-            kdDisplay.innerHTML = `🎯 STAND TYPE: ${typeText}  |  Мод. персонажа: ${avgBonus >= 0 ? `+${avgBonus}` : avgBonus}`;
-        }
-    }
-    
-    function updateUIfromData() {
-        document.getElementById("charName").value = currentData.name;
-        document.getElementById("hp").value = currentData.hp;
-        document.getElementById("energy").value = currentData.energy;
-        document.getElementById("hpMax").innerText = currentData.hpMax;
-        document.getElementById("energyMax").innerText = currentData.energyMax;
-        
-        // Тип стенда
-        const radios = document.querySelectorAll('input[name="standType"]');
-        radios.forEach(radio => {
-            if (radio.value === currentData.standType) radio.checked = true;
-        });
-        
-        buildWheelControls();
-        buildUserStatsPanel();
+    // Обновление всей UI
+    function updateAll() {
+        // Обновляем колесо
         drawWheel();
-        updateModSummary();
+        
+        // Обновляем отображение навыков
+        const skills = calculateSkills();
+        const skillsPanel = document.getElementById("skillsPanel");
+        if (skillsPanel) {
+            skillsPanel.innerHTML = "";
+            for (let [name, value] of Object.entries(skills)) {
+                const div = document.createElement("div");
+                div.className = "skill-card";
+                div.innerHTML = `<div class="skill-name">${name}</div><div class="skill-value">${value >= 0 ? `+${value}` : value}</div>`;
+                skillsPanel.appendChild(div);
+            }
+        }
+        
+        // Боевые параметры
+        const combat = calculateCombat();
+        document.getElementById("kdValue").innerText = combat.kd;
+        document.getElementById("reactionValue").innerText = combat.reaction >= 0 ? `+${combat.reaction}` : combat.reaction;
+        document.getElementById("willValue").innerText = combat.will >= 0 ? `+${combat.will}` : combat.will;
+        document.getElementById("meleeValue").innerText = combat.melee >= 0 ? `+${combat.melee}` : combat.melee;
+        document.getElementById("rangedValue").innerText = combat.ranged >= 0 ? `+${combat.ranged}` : combat.ranged;
+        document.getElementById("standMod").innerText = combat.standMod >= 0 ? `+${combat.standMod}` : combat.standMod;
         
         // Умения
         const skillContainer = document.getElementById("skillList");
@@ -662,22 +541,154 @@
             }
         }
     }
-
+    
+    // Отрисовка колеса
+    const canvas = document.getElementById("standWheel");
+    let ctx = canvas.getContext("2d");
+    
+    function drawWheel() {
+        if (!ctx) return;
+        const w = canvas.width, h = canvas.height;
+        const cx = w/2, cy = h/2;
+        const outerR = w * 0.42, innerR = w * 0.12;
+        const angleStep = (Math.PI * 2) / STAT_LABELS.length;
+        ctx.clearRect(0, 0, w, h);
+        
+        // Внешняя и внутренняя окружности
+        ctx.beginPath(); ctx.arc(cx, cy, outerR, 0, 2*Math.PI); ctx.strokeStyle = "#e6b422"; ctx.lineWidth = 2; ctx.stroke();
+        ctx.beginPath(); ctx.arc(cx, cy, innerR, 0, 2*Math.PI); ctx.strokeStyle = "#e6b42288"; ctx.stroke();
+        
+        for (let i = 0; i < STAT_LABELS.length; i++) {
+            const angle = i * angleStep - Math.PI/2;
+            const endX = cx + Math.cos(angle) * outerR;
+            const endY = cy + Math.sin(angle) * outerR;
+            ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(endX, endY); ctx.strokeStyle = "#e6b42266"; ctx.stroke();
+            
+            // Чёрточки
+            for (let lvl = 1; lvl <= 6; lvl++) {
+                const t = lvl / 6;
+                const rad = innerR + (outerR - innerR) * t;
+                const lx = cx + Math.cos(angle) * rad, ly = cy + Math.sin(angle) * rad;
+                const perp = angle + Math.PI/2;
+                const tick = 4;
+                ctx.beginPath(); ctx.moveTo(lx+Math.cos(perp)*tick, ly+Math.sin(perp)*tick);
+                ctx.lineTo(lx-Math.cos(perp)*tick, ly-Math.sin(perp)*tick); ctx.strokeStyle = "#ffdd99"; ctx.stroke();
+            }
+            
+            // Название
+            const labelR = outerR + 15;
+            ctx.font = "bold 10px 'Oswald'"; ctx.fillStyle = "#ffeaae";
+            ctx.fillText(STAT_LABELS[i], cx+Math.cos(angle)*labelR-15, cy+Math.sin(angle)*labelR+4);
+            // Буква
+            const rank = currentData.wheelStats[STAT_LABELS[i]] || "?";
+            const letterR = outerR + 30;
+            ctx.font = "bold 16px 'Special Elite'"; ctx.fillStyle = rank==="?"?"#bbbbcc":"#ffd966";
+            ctx.fillText(rank, cx+Math.cos(angle)*letterR-10, cy+Math.sin(angle)*letterR+7);
+        }
+        
+        // Узор
+        const points = [];
+        for (let i=0; i<STAT_LABELS.length; i++) {
+            const rank = currentData.wheelStats[STAT_LABELS[i]] || "?";
+            let val = RANK_VALUES[rank] || 0;
+            let t = val===0 ? 0 : val/MAX_RANK;
+            const rad = innerR + (outerR - innerR) * t;
+            const ang = i * angleStep - Math.PI/2;
+            points.push({x: cx+Math.cos(ang)*rad, y: cy+Math.sin(ang)*rad});
+        }
+        if (points.length) {
+            ctx.beginPath(); ctx.moveTo(points[0].x, points[0].y);
+            for(let i=1;i<points.length;i++) ctx.lineTo(points[i].x, points[i].y);
+            ctx.closePath(); ctx.fillStyle = "#e6b42255"; ctx.fill(); ctx.strokeStyle = "#ffcc66"; ctx.lineWidth=2; ctx.stroke();
+            for(let p of points) { ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, 2*Math.PI); ctx.fillStyle="#ffaa33"; ctx.fill(); }
+        }
+        
+        // Центр с названием стенда
+        ctx.beginPath(); ctx.arc(cx, cy, innerR-3, 0, 2*Math.PI); ctx.fillStyle="#0a0412"; ctx.fill(); ctx.stroke();
+        ctx.font = "bold 9px 'Oswald'"; ctx.fillStyle = "#e6b422";
+        let disp = currentData.standName || "STAND";
+        if(disp.length>10) disp=disp.slice(0,8)+"..";
+        ctx.fillText(disp, cx-20, cy+3);
+    }
+    
+    // === ПОСТРОЕНИЕ UI ХАРАКТЕРИСТИК ===
+    function buildUserStatsPanel() {
+        const panel = document.getElementById("userStatsPanel");
+        if (!panel) return;
+        panel.innerHTML = "";
+        for (const stat of USER_STATS) {
+            const val = currentData.userStats[stat];
+            const div = document.createElement("div");
+            div.className = "user-stat";
+            div.innerHTML = `
+                <div class="user-stat-name">${stat}</div>
+                <div class="user-stat-value">
+                    <button class="user-dec" data-stat="${stat}">-</button>
+                    <input type="number" id="stat_${stat}" value="${val}" class="user-stat-input" style="width:45px">
+                    <button class="user-inc" data-stat="${stat}">+</button>
+                </div>
+                <div class="user-stat-mod">${getMod(val)>=0?`+${getMod(val)}`:getMod(val)}</div>
+            `;
+            panel.appendChild(div);
+        }
+        // Обработчики
+        document.querySelectorAll(".user-dec").forEach(btn => btn.addEventListener("click", (e) => {
+            const s = btn.getAttribute("data-stat");
+            let newV = (currentData.userStats[s]||10)-1; if(newV<1) newV=1;
+            currentData.userStats[s]=newV; updateUserStatUI(s); updateAll();
+        }));
+        document.querySelectorAll(".user-inc").forEach(btn => btn.addEventListener("click", (e) => {
+            const s = btn.getAttribute("data-stat");
+            let newV = (currentData.userStats[s]||10)+1; if(newV>30) newV=30;
+            currentData.userStats[s]=newV; updateUserStatUI(s); updateAll();
+        }));
+        document.querySelectorAll(".user-stat-input").forEach(inp => inp.addEventListener("change", (e) => {
+            const id = inp.id.replace("stat_","");
+            let newV = parseInt(inp.value)||10; if(newV<1) newV=1; if(newV>30) newV=30;
+            currentData.userStats[id]=newV; updateUserStatUI(id); updateAll();
+        }));
+    }
+    
+    function updateUserStatUI(stat) {
+        const inp = document.getElementById(`stat_${stat}`);
+        if(inp) inp.value = currentData.userStats[stat];
+        const div = inp?.closest(".user-stat");
+        if(div) {
+            const modSpan = div.querySelector(".user-stat-mod");
+            modSpan.innerText = getMod(currentData.userStats[stat])>=0 ? `+${getMod(currentData.userStats[stat])}` : getMod(currentData.userStats[stat]);
+        }
+    }
+    
+    function buildWheelControls() {
+        const panel = document.getElementById("statsControlPanel");
+        if(!panel) return;
+        panel.innerHTML = "";
+        for(const label of STAT_LABELS) {
+            const cur = currentData.wheelStats[label]||"?";
+            const div = document.createElement("div"); div.className="stat-control-item";
+            div.innerHTML = `<div class="stat-label">${label}</div><select class="stat-value-select" data-stat="${label}">${RANK_LIST.map(r=>`<option value="${r}" ${cur===r?'selected':''}>${r}</option>`).join('')}</select>`;
+            panel.appendChild(div);
+        }
+        document.querySelectorAll(".stat-value-select").forEach(sel => sel.addEventListener("change", (e) => {
+            const sn = sel.getAttribute("data-stat");
+            currentData.wheelStats[sn] = sel.value;
+            updateAll();
+        }));
+    }
+    
+    // === ЭКСПОРТ/ИМПОРТ/СБРОС ===
     function exportChar() {
         currentData.name = document.getElementById("charName").value;
-        currentData.hp = parseInt(document.getElementById("hp").value) || 0;
-        currentData.energy = parseInt(document.getElementById("energy").value) || 0;
-        
+        currentData.hp = parseInt(document.getElementById("hp").value)||0;
+        currentData.energy = parseInt(document.getElementById("energy").value)||0;
         const typeRadio = document.querySelector('input[name="standType"]:checked');
-        if (typeRadio) currentData.standType = typeRadio.value;
-        
+        if(typeRadio) currentData.standType = typeRadio.value;
         const dataStr = JSON.stringify(currentData, null, 2);
-        const blob = new Blob([dataStr], {type: "application/json"});
+        const blob = new Blob([dataStr], {type:"application/json"});
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = `jojo_${currentData.name || "stand"}.json`;
-        a.click();
-        URL.revokeObjectURL(a.href);
+        a.download = `jojo_${currentData.name||"stand"}.json`;
+        a.click(); URL.revokeObjectURL(a.href);
     }
     
     function importFromFile(file) {
@@ -686,109 +697,53 @@
             try {
                 const loaded = JSON.parse(e.target.result);
                 currentData = { ...currentData, ...loaded, wheelStats: { ...currentData.wheelStats, ...loaded.wheelStats }, userStats: { ...currentData.userStats, ...loaded.userStats } };
-                if (!currentData.skills) currentData.skills = [];
-                if (!currentData.standName) currentData.standName = "";
-                updateUIfromData();
-                document.getElementById("turnMessage").innerHTML = "✅ STAND LOADED!";
-            } catch(err) {
-                alert("Invalid Stand File");
-            }
+                if(!currentData.skills) currentData.skills = [];
+                if(!currentData.standName) currentData.standName = "";
+                document.getElementById("charName").value = currentData.name;
+                document.getElementById("hp").value = currentData.hp;
+                document.getElementById("energy").value = currentData.energy;
+                const radios = document.querySelectorAll('input[name="standType"]');
+                radios.forEach(r=>{if(r.value===currentData.standType) r.checked=true;});
+                buildWheelControls(); buildUserStatsPanel(); updateAll();
+                document.getElementById("turnMessage").innerHTML = "✅ LOADED!";
+            } catch(err) { alert("Invalid file"); }
         };
         reader.readAsText(file);
     }
     
     function resetToEmpty() {
-        const emptyWheel = {};
-        STAT_LABELS.forEach(l => emptyWheel[l] = "?");
-        const emptyUser = {};
-        USER_STATS.forEach(s => emptyUser[s] = 10);
-        
-        currentData = {
-            name: "",
-            standName: "",
-            standType: "close",
-            wheelStats: emptyWheel,
-            userStats: emptyUser,
-            hp: 0, energy: 0, hpMax: 100, energyMax: 100,
-            skills: []
-        };
-        updateUIfromData();
+        const emptyWheel = {}; STAT_LABELS.forEach(l=>emptyWheel[l]="?");
+        const emptyUser = {}; USER_STATS.forEach(s=>emptyUser[s]=10);
+        currentData = { name:"", standName:"", standType:"close", wheelStats:emptyWheel, userStats:emptyUser, hp:0, energy:0, hpMax:0, energyMax:100, skills:[] };
+        document.getElementById("charName").value = "";
+        document.getElementById("hp").value = 0;
+        document.getElementById("energy").value = 0;
+        document.querySelector('input[name="standType"][value="close"]').checked = true;
+        buildWheelControls(); buildUserStatsPanel(); updateAll();
         document.getElementById("turnMessage").innerHTML = "🌀 NEW STAND!";
     }
     
-    function addSkill() {
-        const ab = prompt("ABILITY NAME:", "Star Finger");
-        if (ab && ab.trim()) {
-            currentData.skills.push(ab.trim());
-            updateUIfromData();
-        }
-    }
-    
-    function nextTurn() {
-        document.getElementById("turnMessage").innerHTML = "⚡ ZA WARUDO! TOKI WO TOMARE! ⚡";
-    }
-    
-    function removeSkillHandler(e) {
-        if (e.target.classList.contains("remove-skill")) {
-            const idx = parseInt(e.target.getAttribute("data-skill-idx"));
-            if (!isNaN(idx)) {
-                currentData.skills.splice(idx, 1);
-                updateUIfromData();
-            }
-        }
-    }
-    
-    // Ввод названия стенда (через двойной клик по canvas)
-    function promptStandName() {
-        const newName = prompt("Enter STAND NAME:", currentData.standName || "My Stand");
-        if (newName !== null) {
-            currentData.standName = newName.trim() || "";
-            drawWheel();
-        }
-    }
+    function addSkill() { let a = prompt("ABILITY:"); if(a?.trim()){ currentData.skills.push(a.trim()); updateAll(); } }
+    function nextTurn() { document.getElementById("turnMessage").innerHTML = "⚡ ZA WARUDO! ⚡"; }
+    function removeSkillHandler(e) { if(e.target.classList.contains("remove-skill")){ let idx=parseInt(e.target.getAttribute("data-skill-idx")); if(!isNaN(idx)){ currentData.skills.splice(idx,1); updateAll(); } } }
+    function promptStandName() { let n = prompt("STAND NAME:", currentData.standName||"My Stand"); if(n!==null){ currentData.standName=n.trim()||""; drawWheel(); } }
     
     // Инициализация
     window.addEventListener('DOMContentLoaded', () => {
-        const exportBtn = document.getElementById("exportBtn");
-        const importBtn = document.getElementById("importBtn");
-        const resetBtn = document.getElementById("resetBtn");
-        const nextTurnBtn = document.getElementById("nextTurnBtn");
-        const addSkillBtn = document.getElementById("addSkillBtn");
-        const fileInput = document.getElementById("fileInput");
-        const skillList = document.getElementById("skillList");
-        const charName = document.getElementById("charName");
-        const hp = document.getElementById("hp");
-        const energy = document.getElementById("energy");
-        const canvasElem = document.getElementById("standWheel");
-        
-        if (exportBtn) exportBtn.addEventListener("click", exportChar);
-        if (importBtn) importBtn.addEventListener("click", () => fileInput.click());
-        if (resetBtn) resetBtn.addEventListener("click", resetToEmpty);
-        if (nextTurnBtn) nextTurnBtn.addEventListener("click", nextTurn);
-        if (addSkillBtn) addSkillBtn.addEventListener("click", addSkill);
-        if (fileInput) {
-            fileInput.addEventListener("change", (e) => {
-                if (e.target.files[0]) importFromFile(e.target.files[0]);
-                e.target.value = "";
-            });
-        }
-        if (skillList) skillList.addEventListener("click", removeSkillHandler);
-        if (charName) charName.addEventListener("input", (e) => currentData.name = e.target.value);
-        if (hp) hp.addEventListener("input", (e) => currentData.hp = parseInt(e.target.value) || 0);
-        if (energy) energy.addEventListener("input", (e) => currentData.energy = parseInt(e.target.value) || 0);
-        
-        // Название стенда по клику на центр колеса
-        if (canvasElem) canvasElem.addEventListener("dblclick", promptStandName);
-        
-        // Тип стенда
-        const radios = document.querySelectorAll('input[name="standType"]');
-        radios.forEach(radio => {
-            radio.addEventListener("change", (e) => {
-                if (e.target.checked) currentData.standType = e.target.value;
-                updateModSummary();
-            });
-        });
-        
+        document.getElementById("exportBtn").addEventListener("click", exportChar);
+        document.getElementById("importBtn").addEventListener("click", ()=>document.getElementById("fileInput").click());
+        document.getElementById("resetBtn").addEventListener("click", resetToEmpty);
+        document.getElementById("nextTurnBtn").addEventListener("click", nextTurn);
+        document.getElementById("addSkillBtn").addEventListener("click", addSkill);
+        document.getElementById("fileInput").addEventListener("change", (e)=>{ if(e.target.files[0]) importFromFile(e.target.files[0]); e.target.value=""; });
+        document.getElementById("skillList").addEventListener("click", removeSkillHandler);
+        document.getElementById("charName").addEventListener("input", (e)=>currentData.name=e.target.value);
+        document.getElementById("hp").addEventListener("input", (e)=>currentData.hp=parseInt(e.target.value)||0);
+        document.getElementById("energy").addEventListener("input", (e)=>currentData.energy=parseInt(e.target.value)||0);
+        document.getElementById("meleeType").addEventListener("change", ()=>updateAll());
+        document.getElementById("rangedProf").addEventListener("change", ()=>updateAll());
+        document.querySelectorAll('input[name="standType"]').forEach(r=>r.addEventListener("change", ()=>{ if(r.checked) currentData.standType=r.value; updateAll(); }));
+        document.getElementById("standWheel").addEventListener("dblclick", promptStandName);
         resetToEmpty();
     });
 </script>
