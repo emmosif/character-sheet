@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>JOJO — BIZARRE STAND | Анкета персонажа</title>
-    <style>
+<style>
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
         
         * {
@@ -13,11 +13,11 @@
         }
 
         body {
-            background: #eef3e6;
-            background-image: radial-gradient(circle at 10% 20%, rgba(180, 210, 140, 0.15) 0%, rgba(230, 240, 210, 0.05) 100%);
+            background: #1e261a;
+            background-image: radial-gradient(circle at 15% 30%, rgba(70, 100, 50, 0.25) 0%, #121a0f 100%);
             font-family: 'Montserrat', sans-serif;
             padding: 40px 32px;
-            color: #2c2a24;
+            color: #e6dfc7;
             min-height: 100vh;
         }
         
@@ -26,15 +26,14 @@
             margin: 0 auto;
         }
         
-        /* главная карточка — светлая, с тёплым акцентом */
         .stand-card {
-            background: rgba(250, 248, 235, 0.92);
-            backdrop-filter: blur(2px);
-            border: 1px solid rgba(180, 140, 70, 0.4);
+            background: rgba(28, 34, 22, 0.88);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(200, 130, 50, 0.55);
             padding: 32px 36px;
             position: relative;
             border-radius: 4px;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
         }
         
         .stand-card::before,
@@ -43,7 +42,7 @@
             position: absolute;
             width: 50px;
             height: 50px;
-            border-color: #c2852c;
+            border-color: #dc8627;
             border-style: solid;
             border-width: 0;
         }
@@ -64,8 +63,8 @@
         
         .jojo-tag {
             font-family: 'Cormorant Garamond', serif;
-            background: #c2852c;
-            color: #fef9e6;
+            background: #dc8627;
+            color: #141f0e;
             display: inline-block;
             padding: 6px 32px;
             position: absolute;
@@ -77,10 +76,9 @@
             text-transform: uppercase;
             z-index: 5;
             border-radius: 2px;
-            box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
         }
         
-        /* три колонки с красивым разделением */
         .three-columns {
             display: flex;
             flex-wrap: wrap;
@@ -94,9 +92,8 @@
             min-width: 280px;
         }
         
-        /* разделитель между колонками 1 и 2, 2 и 3 */
         .col:not(:last-child) {
-            border-right: 1px solid rgba(160, 130, 70, 0.35);
+            border-right: 1px solid rgba(200, 150, 70, 0.4);
             padding-right: 28px;
         }
         
@@ -107,7 +104,6 @@
             }
         }
         
-        /* портреты в стиле элегантных рамок */
         .portrait-section {
             display: flex;
             flex-direction: column;
@@ -116,18 +112,18 @@
         }
         
         .portrait-card {
-            background: #fbf8e8;
-            border: 1px solid #dad0b0;
+            background: #242c1c;
+            border: 1px solid #8f6b3a;
             padding: 12px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         
         .portrait-label {
             font-family: 'Cormorant Garamond', serif;
             font-weight: 600;
             letter-spacing: 1px;
-            color: #9b7a3a;
+            color: #e0aa5e;
             margin-bottom: 10px;
             font-size: 0.9rem;
         }
@@ -137,20 +133,19 @@
             aspect-ratio: 1 / 1;
             max-width: 200px;
             margin: 0 auto;
-            background: #e6dfcc;
-            border: 1px dashed #c2a256;
+            background: #1a2415;
+            border: 1px dashed #b87a34;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             overflow: hidden;
-            position: relative;
             transition: 0.2s;
         }
         
         .portrait-frame:hover {
-            border-color: #c2852c;
-            background: #f0e8d4;
+            border-color: #dc8627;
+            background: #2a3520;
         }
         
         .portrait-frame img {
@@ -160,13 +155,12 @@
         }
         
         .portrait-placeholder {
-            color: #b8a878;
+            color: #b88a4a;
             font-size: 0.7rem;
             text-align: center;
             padding: 12px;
         }
         
-        /* колесо — светлая тема */
         .wheel-container {
             display: flex;
             justify-content: center;
@@ -174,9 +168,9 @@
         }
         
         canvas {
-            background: #fdf9ed;
+            background: #1f2a18;
             border-radius: 50%;
-            box-shadow: 0 0 0 2px #e0ce9c, 0 8px 24px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 0 2px #b87a34, 0 8px 24px rgba(0, 0, 0, 0.4);
             width: 100%;
             height: auto;
             max-width: 380px;
@@ -185,10 +179,10 @@
         }
         
         .stand-type-selector {
-            background: #f3efdf;
+            background: #232c1b;
             padding: 14px 16px;
             margin: 16px 0;
-            border-left: 4px solid #c2852c;
+            border-left: 4px solid #dc8627;
         }
         
         .stand-type-selector h4 {
@@ -196,7 +190,7 @@
             font-size: 0.85rem;
             letter-spacing: 2px;
             margin-bottom: 10px;
-            color: #9b7a3a;
+            color: #e0aa5e;
         }
         
         .stand-type-selector label {
@@ -204,9 +198,9 @@
             font-size: 0.75rem;
             font-weight: 500;
             cursor: pointer;
+            color: #cfc294;
         }
         
-        /* статы колеса */
         .stats-control-wheel {
             display: flex;
             flex-wrap: wrap;
@@ -216,25 +210,25 @@
         }
         
         .stat-control-item {
-            background: #f7f3e3;
+            background: #242e1c;
             padding: 6px 12px;
             min-width: 75px;
             text-align: center;
-            border-bottom: 2px solid #e4d6b0;
+            border-bottom: 2px solid #8f6b3a;
         }
         
         .stat-label {
             font-size: 0.7rem;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            color: #b2822c;
+            color: #e0aa5e;
             font-weight: 600;
         }
         
         .stat-value-select {
-            background: #fffcf0;
-            border: 1px solid #dccfaa;
-            color: #6a572e;
+            background: #1a2415;
+            border: 1px solid #b87a34;
+            color: #f0ddb0;
             padding: 4px 6px;
             font-size: 0.9rem;
             margin-top: 5px;
@@ -242,7 +236,6 @@
             cursor: pointer;
         }
         
-        /* статы юзера */
         .user-stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -251,16 +244,16 @@
         }
         
         .user-stat {
-            background: #fefcf4;
+            background: #232c1b;
             padding: 8px 6px;
             text-align: center;
-            border-bottom: 1px solid #e6dcbf;
+            border-bottom: 1px solid #8f6b3a;
         }
         
         .user-stat-name {
             font-size: 0.7rem;
             text-transform: uppercase;
-            color: #a5863e;
+            color: #e0aa5e;
             font-weight: 500;
         }
         
@@ -275,17 +268,17 @@
         .user-stat-value input {
             width: 48px;
             text-align: center;
-            background: #fffef8;
-            border: 1px solid #ddd2ae;
-            color: #4a3c1c;
+            background: #1a2415;
+            border: 1px solid #8f6b3a;
+            color: #f0ddb0;
             font-size: 0.9rem;
             padding: 4px;
         }
         
         .user-stat-value button {
-            background: #f0e8d4;
-            border: 1px solid #d4c49a;
-            color: #b2822c;
+            background: #2e3a22;
+            border: 1px solid #b87a34;
+            color: #e0aa5e;
             width: 24px;
             cursor: pointer;
             font-weight: 500;
@@ -294,10 +287,9 @@
         .user-stat-mod {
             font-size: 0.7rem;
             font-weight: 500;
-            color: #c2852c;
+            color: #dc8627;
         }
         
-        /* навыки — светлая сетка */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -309,9 +301,9 @@
         }
         
         .skill-card {
-            background: #fefcf4;
+            background: #232c1b;
             padding: 6px 10px;
-            border-left: 3px solid #c2a256;
+            border-left: 3px solid #b87a34;
         }
         
         .skill-name {
@@ -319,30 +311,29 @@
             font-size: 0.7rem;
             letter-spacing: 0.3px;
             text-transform: uppercase;
-            color: #8b693a;
+            color: #cfc294;
         }
         
         .skill-value {
             font-family: monospace;
             font-size: 1rem;
             font-weight: 600;
-            color: #c2852c;
+            color: #e0aa5e;
             margin-top: 3px;
         }
         
-        /* боевые статы */
         .combat-stat {
-            background: #fdfaef;
+            background: #232c1b;
             padding: 10px 12px;
             margin: 12px 0;
             text-align: center;
-            border-bottom: 1px solid #e6dcbf;
+            border-bottom: 1px solid #8f6b3a;
         }
         
         .combat-stat-value {
             font-size: 1.6rem;
             font-weight: 600;
-            color: #b5731a;
+            color: #e0aa5e;
             font-family: monospace;
         }
         
@@ -355,20 +346,20 @@
         }
         
         .resource input {
-            background: #fffef8;
+            background: #1a2415;
             border: none;
-            border-bottom: 1px solid #cfbc88;
+            border-bottom: 1px solid #b87a34;
             width: 70px;
             font-size: 1rem;
-            color: #4a3c1c;
+            color: #f0ddb0;
             padding: 4px;
             text-align: center;
         }
         
         .weapon-select {
-            background: #fffcf0;
-            border: 1px solid #dccfaa;
-            color: #6a572e;
+            background: #1a2415;
+            border: 1px solid #b87a34;
+            color: #e0aa5e;
             padding: 5px;
             width: 100%;
             margin: 6px 0;
@@ -377,7 +368,7 @@
         
         .small-text {
             font-size: 0.65rem;
-            color: #ad9a62;
+            color: #b88a4a;
             margin-top: 4px;
         }
         
@@ -389,18 +380,18 @@
         }
         
         .ability-tag {
-            background: #f2ecdb;
-            border-right: 2px solid #c2a256;
+            background: #2e3a22;
+            border-right: 2px solid #b87a34;
             padding: 4px 12px;
             font-size: 0.7rem;
             font-weight: 500;
-            color: #5c4a28;
+            color: #e6dfc7;
         }
         
         .jojo-btn {
-            background: #f0e8d4;
-            border: 1px solid #c2a256;
-            color: #9b7a3a;
+            background: #2e3a22;
+            border: 1px solid #b87a34;
+            color: #e0aa5e;
             padding: 5px 16px;
             font-weight: 500;
             letter-spacing: 1px;
@@ -413,9 +404,9 @@
         }
         
         .jojo-btn:hover {
-            background: #e0cfaa;
-            color: #5a431c;
-            border-color: #b2822c;
+            background: #b87a34;
+            color: #141f0e;
+            border-color: #dc8627;
         }
         
         h3 {
@@ -423,9 +414,9 @@
             font-weight: 600;
             letter-spacing: 2px;
             font-size: 1.2rem;
-            color: #b2822c;
+            color: #e0aa5e;
             margin: 20px 0 12px 0;
-            border-left: 3px solid #c2852c;
+            border-left: 3px solid #dc8627;
             padding-left: 12px;
         }
         
@@ -433,7 +424,7 @@
             font-family: 'Cormorant Garamond', serif;
             font-weight: 500;
             font-size: 0.9rem;
-            color: #b2822c;
+            color: #e0aa5e;
             margin: 12px 0 6px;
         }
         
@@ -443,20 +434,23 @@
         
         hr {
             border: none;
-            border-top: 1px solid #e0d4b0;
+            border-top: 1px solid #8f6b3a;
             margin: 10px 0;
         }
         
-        .flex-badge {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-        }
-        
-        /* подписи */
         .label-small {
             font-size: 0.7rem;
-            color: #ad9a62;
+            color: #b88a4a;
+        }
+        
+        .skills-grid::-webkit-scrollbar {
+            width: 4px;
+        }
+        .skills-grid::-webkit-scrollbar-track {
+            background: #2a3520;
+        }
+        .skills-grid::-webkit-scrollbar-thumb {
+            background: #b87a34;
         }
     </style>
 </head>
