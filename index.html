@@ -10,7 +10,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
         }
 
         body {
@@ -26,7 +25,6 @@
             margin: 0 auto;
         }
 
-        /* главная карточка стенда */
         .stand-card {
             background: linear-gradient(145deg, #18121e, #0c0810);
             border: 3px double #e6b422;
@@ -49,22 +47,23 @@
             box-shadow: 6px 6px 0 #4a1818;
         }
 
-        /* колесо стенда — canvas */
         .wheel-container {
             display: flex;
             justify-content: center;
-            margin: 20px 0 30px;
+            margin: 30px 0;
         }
+        
         canvas {
             background: #0a0610;
             border-radius: 50%;
             box-shadow: 0 0 0 6px #e6b42244, 0 0 0 12px #2c1420, 0 10px 35px black;
-            max-width: 100%;
+            width: 100%;
             height: auto;
+            max-width: 500px;
+            aspect-ratio: 1/1;
             cursor: pointer;
         }
 
-        /* панель управления статами */
         .stats-control {
             display: flex;
             flex-wrap: wrap;
@@ -72,6 +71,7 @@
             gap: 20px;
             margin: 25px 0 20px;
         }
+        
         .stat-control-item {
             background: #140e16;
             border-left: 6px solid #e6b422;
@@ -79,6 +79,7 @@
             min-width: 130px;
             text-align: center;
         }
+        
         .stat-label {
             font-weight: bold;
             letter-spacing: 2px;
@@ -86,6 +87,7 @@
             text-transform: uppercase;
             color: #ffdd99;
         }
+        
         .stat-value-select {
             background: #241e28;
             color: #ffcd7e;
@@ -97,6 +99,7 @@
             cursor: pointer;
             font-family: monospace;
             text-align: center;
+            width: 80px;
         }
 
         .other-panel {
@@ -105,15 +108,18 @@
             gap: 30px;
             margin-top: 30px;
         }
+        
         .info-area {
             flex: 1;
             background: #0c0812cc;
             padding: 18px;
             backdrop-filter: blur(4px);
         }
+        
         .resource {
             margin: 12px 0;
         }
+        
         .resource input {
             background: #1f1722;
             border: none;
@@ -123,6 +129,7 @@
             color: #ffdfaa;
             font-weight: bold;
         }
+        
         .kd-stand {
             background: #00000077;
             padding: 12px;
@@ -130,6 +137,7 @@
             font-family: monospace;
             margin: 15px 0;
         }
+        
         .jojo-btn {
             background: #2e1e26;
             border: 1px solid #e6b422;
@@ -141,36 +149,37 @@
             transition: 0.15s;
             margin: 5px 5px 0 0;
         }
+        
         .jojo-btn:hover {
             background: #e6b422;
             color: #150e18;
             transform: scale(0.97);
         }
+        
         .skill-list {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
             margin: 12px 0;
         }
+        
         .skill-tag {
             background: #1f1822;
             border-right: 4px solid #e6b422;
             padding: 4px 14px;
         }
+        
         input, select {
             background: #1f1824;
             border: 1px solid #e6b422;
             color: #ffeaac;
             padding: 6px;
         }
+        
         h3 {
             border-left: 6px solid #e6b422;
             padding-left: 12px;
             margin: 15px 0 10px;
-        }
-        @media (max-width: 700px) {
-            .stats-control { gap: 10px; }
-            .stat-control-item { padding: 5px 10px; min-width: 100px; }
         }
     </style>
 </head>
@@ -197,10 +206,10 @@
 
     <!-- КОЛЕСО СТЕНДА -->
     <div class="wheel-container">
-        <canvas id="standWheel" width="500" height="500" style="width:100%; height:auto; max-width:500px; aspect-ratio:1/1"></canvas>
+        <canvas id="standWheel" width="500" height="500"></canvas>
     </div>
 
-    <!-- Ручное управление параметрами -->
+    <!-- Панель управления параметрами -->
     <div class="stats-control" id="statsControlPanel"></div>
 
     <div class="other-panel">
@@ -222,60 +231,66 @@
 </div>
 
 <script>
-    // Параметры стенда (как в колесе JoJo)
+    // Параметры стенда
     const STAT_LABELS = ["POWER", "SPEED", "PRECISION", "RANGE", "DURABILITY"];
     const RANK_VALUES = {
         "?": 0, "E": 1, "D": 2, "C": 3, "B": 4, "A": 5
     };
     const RANK_LIST = ["?", "E", "D", "C", "B", "A"];
 
-    // начальная пустая анкета (все статы = ?)
-    let standStats = {
-        POWER: "?",
-        SPEED: "?",
-        PRECISION: "?",
-        RANGE: "?",
-        DURABILITY: "?"
-    };
-
+    // Начальные данные
     let currentData = {
         name: "",
         grade: "A",
-        stats: standStats,
-        hp: 0, energy: 0, hpMax: 100, energyMax: 100,
+        stats: {
+            POWER: "?",
+            SPEED: "?",
+            PRECISION: "?",
+            RANGE: "?",
+            DURABILITY: "?"
+        },
+        hp: 0,
+        energy: 0,
+        hpMax: 100,
+        energyMax: 100,
         skills: []
     };
 
-    let canvas = document.getElementById("standWheel");
+    const canvas = document.getElementById("standWheel");
     let ctx = canvas.getContext("2d");
 
-    // отрисовка колеса по текущим статам
+    // Функция отрисовки колеса
     function drawWheel() {
-        const w = canvas.width, h = canvas.height;
-        const centerX = w/2, centerY = h/2;
-        const radius = w * 0.38;
-        ctx.clearRect(0, 0, w, h);
+        if (!ctx) {
+            console.error("Canvas context not found");
+            return;
+        }
         
+        const w = canvas.width;
+        const h = canvas.height;
+        const centerX = w/2;
+        const centerY = h/2;
+        const radius = w * 0.38;
         const angleStep = (Math.PI * 2) / STAT_LABELS.length;
         
-        // рисуем лучи и сектора
+        ctx.clearRect(0, 0, w, h);
+        
         for (let i = 0; i < STAT_LABELS.length; i++) {
-            let statKey = STAT_LABELS[i];
-            let rank = currentData.stats[statKey] || "?";
-            let value = RANK_VALUES[rank] || 0;
-            // максимальное значение = 5 (A)
-            let intensity = value / 5; 
+            const statKey = STAT_LABELS[i];
+            const rank = currentData.stats[statKey] || "?";
+            const value = RANK_VALUES[rank] || 0;
+            const intensity = value / 5;
             
-            // цвет сектора: от тёмно-красного до золотого в зависимости от силы
-            let r = 180 + Math.floor(75 * intensity);
-            let g = 80 + Math.floor(130 * intensity);
-            let b = 60 + Math.floor(70 * intensity);
-            let fillColor = `rgba(${r}, ${g}, ${b}, 0.85)`;
-            let strokeColor = (rank === "?") ? "#aaaaaa" : "#ffcc66";
+            // Цвет сектора
+            const r = 180 + Math.floor(75 * intensity);
+            const g = 80 + Math.floor(130 * intensity);
+            const b = 60 + Math.floor(70 * intensity);
+            const fillColor = `rgba(${r}, ${g}, ${b}, 0.85)`;
             
-            let startAngle = i * angleStep - Math.PI/2;
-            let endAngle = (i+1) * angleStep - Math.PI/2;
+            const startAngle = i * angleStep - Math.PI/2;
+            const endAngle = (i+1) * angleStep - Math.PI/2;
             
+            // Рисуем сектор
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
             ctx.arc(centerX, centerY, radius, startAngle, endAngle);
@@ -285,51 +300,51 @@
             ctx.lineWidth = 2;
             ctx.stroke();
             
-            // линия-разделитель
+            // Рисуем линии
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
             ctx.lineTo(centerX + Math.cos(startAngle) * radius, centerY + Math.sin(startAngle) * radius);
             ctx.strokeStyle = "#e6b42266";
             ctx.stroke();
             
-            // внешний текст (название стата)
-            let midAngle = startAngle + angleStep/2;
-            let textRadius = radius + 22;
-            let xText = centerX + Math.cos(midAngle) * textRadius;
-            let yText = centerY + Math.sin(midAngle) * textRadius;
-            ctx.font = "bold 16px 'Oswald'";
+            // Название стата
+            const midAngle = startAngle + angleStep/2;
+            const textRadius = radius + 22;
+            const xText = centerX + Math.cos(midAngle) * textRadius;
+            const yText = centerY + Math.sin(midAngle) * textRadius;
+            ctx.font = "bold 14px 'Oswald'";
             ctx.fillStyle = "#ffeaae";
-            ctx.shadowBlur = 0;
-            ctx.fillText(STAT_LABELS[i], xText-18, yText+6);
+            ctx.fillText(STAT_LABELS[i], xText - 20, yText + 5);
             
-            // отображение ранга внутри сектора (ближе к центру)
-            let innerR = radius * 0.6;
-            let xRank = centerX + Math.cos(midAngle) * innerR;
-            let yRank = centerY + Math.sin(midAngle) * innerR;
-            ctx.font = "bold 28px 'Special Elite'";
+            // Значение ранга
+            const innerR = radius * 0.6;
+            const xRank = centerX + Math.cos(midAngle) * innerR;
+            const yRank = centerY + Math.sin(midAngle) * innerR;
+            ctx.font = "bold 24px 'Special Elite'";
             ctx.fillStyle = (rank === "?") ? "#bbbbcc" : "#ffd966";
-            ctx.shadowBlur = 4;
-            ctx.fillText(rank, xRank-12, yRank+10);
+            ctx.fillText(rank, xRank - 10, yRank + 8);
         }
         
-        // рисуем центральный круг
+        // Центральный круг
         ctx.beginPath();
-        ctx.arc(centerX, centerY, radius*0.28, 0, 2*Math.PI);
+        ctx.arc(centerX, centerY, radius * 0.28, 0, 2 * Math.PI);
         ctx.fillStyle = "#0a0412";
         ctx.fill();
         ctx.strokeStyle = "#e6b422";
         ctx.lineWidth = 3;
         ctx.stroke();
-        ctx.font = "bold 16px 'Oswald'";
+        ctx.font = "bold 14px 'Oswald'";
         ctx.fillStyle = "#e6b422";
-        ctx.fillText("STAND", centerX-32, centerY+8);
+        ctx.fillText("STAND", centerX - 28, centerY + 6);
     }
 
-    // создание панели управления статами (селекторы с возможностью "?")
+    // Создание панели управления
     function buildStatControls() {
         const panel = document.getElementById("statsControlPanel");
+        if (!panel) return;
+        
         panel.innerHTML = "";
-        for (let label of STAT_LABELS) {
+        for (const label of STAT_LABELS) {
             const currentVal = currentData.stats[label] || "?";
             const div = document.createElement("div");
             div.className = "stat-control-item";
@@ -341,14 +356,14 @@
             `;
             panel.appendChild(div);
         }
-        // привязать события изменения
+        
+        // Добавляем обработчики
         document.querySelectorAll(".stat-value-select").forEach(select => {
             select.addEventListener("change", (e) => {
                 const statName = e.target.getAttribute("data-stat");
                 currentData.stats[statName] = e.target.value;
                 drawWheel();
                 updateKD();
-                // сохраняем изменения в данных
             });
         });
     }
@@ -356,55 +371,75 @@
     function updateKD() {
         const grade = currentData.grade;
         let gradeBonus = grade === "S" ? 6 : grade === "A" ? 4 : grade === "B" ? 2 : grade === "C" ? 0 : grade === "D" ? -1 : -2;
-        let totalPower = 0, count = 0;
-        for(let s of STAT_LABELS) {
-            let val = RANK_VALUES[currentData.stats[s]] || 0;
+        let totalPower = 0;
+        let count = 0;
+        
+        for (const s of STAT_LABELS) {
+            const val = RANK_VALUES[currentData.stats[s]] || 0;
             totalPower += val;
-            if(currentData.stats[s] !== "?") count++;
+            if (currentData.stats[s] !== "?") count++;
         }
-        let avg = (count > 0 ? (totalPower/count) : 0);
-        let kd = Math.floor(avg * 2 + gradeBonus);
-        document.getElementById("kdDisplay").innerHTML = `🎯 STAND DESTINY: ${kd}  |  GRADE ${grade}  |  WILLPOWER`;
+        
+        const avg = count > 0 ? totalPower / count : 0;
+        const kd = Math.floor(avg * 2 + gradeBonus);
+        const kdDisplay = document.getElementById("kdDisplay");
+        if (kdDisplay) {
+            kdDisplay.innerHTML = `🎯 STAND DESTINY: ${kd}  |  GRADE ${grade}  |  WILLPOWER`;
+        }
     }
 
     function updateUIfromData() {
-        document.getElementById("charName").value = currentData.name;
-        document.getElementById("grade").value = currentData.grade;
-        document.getElementById("hp").value = currentData.hp;
-        document.getElementById("energy").value = currentData.energy;
-        document.getElementById("hpMax").innerText = currentData.hpMax;
-        document.getElementById("energyMax").innerText = currentData.energyMax;
+        const charName = document.getElementById("charName");
+        const grade = document.getElementById("grade");
+        const hp = document.getElementById("hp");
+        const energy = document.getElementById("energy");
+        const hpMax = document.getElementById("hpMax");
+        const energyMax = document.getElementById("energyMax");
+        
+        if (charName) charName.value = currentData.name;
+        if (grade) grade.value = currentData.grade;
+        if (hp) hp.value = currentData.hp;
+        if (energy) energy.value = currentData.energy;
+        if (hpMax) hpMax.innerText = currentData.hpMax;
+        if (energyMax) energyMax.innerText = currentData.energyMax;
+        
         buildStatControls();
         drawWheel();
         updateKD();
-        // обновить умения
+        
+        // Обновляем умения
         const skillContainer = document.getElementById("skillList");
-        skillContainer.innerHTML = "";
-        if (currentData.skills.length === 0) skillContainer.innerHTML = "<div style='color:#aa8866'>⚔️ No Abilities</div>";
-        else {
-            currentData.skills.forEach((sk, idx) => {
-                const chip = document.createElement("div");
-                chip.className = "skill-tag";
-                chip.innerHTML = `${sk} <span data-skill-idx="${idx}" class="remove-skill" style="cursor:pointer;">✖</span>`;
-                skillContainer.appendChild(chip);
-            });
+        if (skillContainer) {
+            skillContainer.innerHTML = "";
+            if (currentData.skills.length === 0) {
+                skillContainer.innerHTML = "<div style='color:#aa8866'>⚔️ No Abilities</div>";
+            } else {
+                currentData.skills.forEach((sk, idx) => {
+                    const chip = document.createElement("div");
+                    chip.className = "skill-tag";
+                    chip.innerHTML = `${sk} <span data-skill-idx="${idx}" class="remove-skill" style="cursor:pointer;">✖</span>`;
+                    skillContainer.appendChild(chip);
+                });
+            }
         }
     }
 
-    // экспорт, импорт, сброс
+    // Экспорт, импорт, сброс
     function exportChar() {
         currentData.name = document.getElementById("charName").value;
         currentData.grade = document.getElementById("grade").value;
         currentData.hp = parseInt(document.getElementById("hp").value) || 0;
         currentData.energy = parseInt(document.getElementById("energy").value) || 0;
+        
         const dataStr = JSON.stringify(currentData, null, 2);
-        const blob = new Blob([dataStr], {type:"application/json"});
+        const blob = new Blob([dataStr], {type: "application/json"});
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
         a.download = `jojo_${currentData.name || "stand"}.json`;
         a.click();
         URL.revokeObjectURL(a.href);
     }
+    
     function importFromFile(file) {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -413,53 +448,91 @@
                 currentData = { ...currentData, ...loaded, stats: { ...currentData.stats, ...loaded.stats } };
                 if (!currentData.skills) currentData.skills = [];
                 updateUIfromData();
-                document.getElementById("turnMessage").innerHTML = "✅ STAND WHEEL LOADED!";
-            } catch(err) { alert("Invalid Stand File"); }
+                const turnMsg = document.getElementById("turnMessage");
+                if (turnMsg) turnMsg.innerHTML = "✅ STAND WHEEL LOADED!";
+            } catch(err) {
+                alert("Invalid Stand File");
+            }
         };
         reader.readAsText(file);
     }
+    
     function resetToEmpty() {
         const emptyStats = {};
         STAT_LABELS.forEach(l => emptyStats[l] = "?");
         currentData = {
-            name: "", grade: "A", stats: emptyStats, hp: 0, energy: 0, hpMax: 100, energyMax: 100, skills: []
+            name: "",
+            grade: "A",
+            stats: emptyStats,
+            hp: 0,
+            energy: 0,
+            hpMax: 100,
+            energyMax: 100,
+            skills: []
         };
         updateUIfromData();
-        document.getElementById("turnMessage").innerHTML = "🌀 NEW STAND — ALL PARAMETERS ?";
+        const turnMsg = document.getElementById("turnMessage");
+        if (turnMsg) turnMsg.innerHTML = "🌀 NEW STAND — ALL PARAMETERS ?";
     }
+    
     function addSkill() {
-        let ab = prompt("ABILITY NAME:", "Star Finger");
-        if(ab?.trim()) currentData.skills.push(ab.trim());
-        updateUIfromData();
-    }
-    function nextTurn() {
-        document.getElementById("turnMessage").innerHTML = "⚡ ZA WARUDO! TOKI WO TOMARE! ⚡";
-    }
-    function removeSkillHandler(e) {
-        if(e.target.classList.contains("remove-skill")) {
-            const idx = parseInt(e.target.getAttribute("data-skill-idx"));
-            if(!isNaN(idx)) currentData.skills.splice(idx,1);
+        const ab = prompt("ABILITY NAME:", "Star Finger");
+        if (ab && ab.trim()) {
+            currentData.skills.push(ab.trim());
             updateUIfromData();
         }
     }
+    
+    function nextTurn() {
+        const turnMsg = document.getElementById("turnMessage");
+        if (turnMsg) turnMsg.innerHTML = "⚡ ZA WARUDO! TOKI WO TOMARE! ⚡";
+    }
+    
+    function removeSkillHandler(e) {
+        if (e.target.classList.contains("remove-skill")) {
+            const idx = parseInt(e.target.getAttribute("data-skill-idx"));
+            if (!isNaN(idx)) {
+                currentData.skills.splice(idx, 1);
+                updateUIfromData();
+            }
+        }
+    }
 
-    // обработчики
-    document.getElementById("exportBtn").addEventListener("click", exportChar);
-    document.getElementById("importBtn").addEventListener("click", ()=>document.getElementById("fileInput").click());
-    document.getElementById("resetBtn").addEventListener("click", resetToEmpty);
-    document.getElementById("nextTurnBtn").addEventListener("click", nextTurn);
-    document.getElementById("addSkillBtn").addEventListener("click", addSkill);
-    document.getElementById("fileInput").addEventListener("change", (e)=>{
-        if(e.target.files[0]) importFromFile(e.target.files[0]);
-        e.target.value="";
+    // Инициализация после загрузки страницы
+    window.addEventListener('DOMContentLoaded', () => {
+        // Настройка обработчиков
+        const exportBtn = document.getElementById("exportBtn");
+        const importBtn = document.getElementById("importBtn");
+        const resetBtn = document.getElementById("resetBtn");
+        const nextTurnBtn = document.getElementById("nextTurnBtn");
+        const addSkillBtn = document.getElementById("addSkillBtn");
+        const fileInput = document.getElementById("fileInput");
+        const skillList = document.getElementById("skillList");
+        const charName = document.getElementById("charName");
+        const grade = document.getElementById("grade");
+        const hp = document.getElementById("hp");
+        const energy = document.getElementById("energy");
+        
+        if (exportBtn) exportBtn.addEventListener("click", exportChar);
+        if (importBtn) importBtn.addEventListener("click", () => fileInput.click());
+        if (resetBtn) resetBtn.addEventListener("click", resetToEmpty);
+        if (nextTurnBtn) nextTurnBtn.addEventListener("click", nextTurn);
+        if (addSkillBtn) addSkillBtn.addEventListener("click", addSkill);
+        if (fileInput) {
+            fileInput.addEventListener("change", (e) => {
+                if (e.target.files[0]) importFromFile(e.target.files[0]);
+                e.target.value = "";
+            });
+        }
+        if (skillList) skillList.addEventListener("click", removeSkillHandler);
+        if (charName) charName.addEventListener("input", (e) => currentData.name = e.target.value);
+        if (grade) grade.addEventListener("change", (e) => { currentData.grade = e.target.value; updateKD(); });
+        if (hp) hp.addEventListener("input", (e) => currentData.hp = parseInt(e.target.value) || 0);
+        if (energy) energy.addEventListener("input", (e) => currentData.energy = parseInt(e.target.value) || 0);
+        
+        // Запускаем отрисовку
+        resetToEmpty();
     });
-    document.getElementById("skillList").addEventListener("click", removeSkillHandler);
-    document.getElementById("charName").addEventListener("input", (e)=>currentData.name=e.target.value);
-    document.getElementById("grade").addEventListener("change", (e)=>{ currentData.grade=e.target.value; updateKD(); });
-    document.getElementById("hp").addEventListener("input", (e)=>currentData.hp=parseInt(e.target.value)||0);
-    document.getElementById("energy").addEventListener("input", (e)=>currentData.energy=parseInt(e.target.value)||0);
-
-    resetToEmpty(); // инициализация
 </script>
 </body>
 </html>
