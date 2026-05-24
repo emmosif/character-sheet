@@ -880,6 +880,13 @@ function resetAll(){
     }
     function nextTurn(){ document.getElementById("turnMessage").innerHTML = "◈ ZA WARUDO! ◈"; }
     function promptStandName(){ let n=prompt("STAND NAME:", currentData.standName||"My Stand"); if(n!==null){ currentData.standName=n.trim()||""; drawWheel(); } }
+
+    function testElements() {
+    console.log("userStatsPanel:", document.getElementById("userStatsPanel"));
+    console.log("skillsPanel:", document.getElementById("skillsPanel"));
+    console.log("statsControlPanel:", document.getElementById("statsControlPanel"));
+    console.log("standAbilitiesList:", document.getElementById("standAbilitiesList"));
+}
     
     // Инициализация
     window.addEventListener('DOMContentLoaded',()=>{
@@ -905,6 +912,7 @@ function resetAll(){
         buildUserStats();
         updateAll();
         resetAll();
+        testElements();
     });
 </script>
 </body>
