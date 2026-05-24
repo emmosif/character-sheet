@@ -509,9 +509,14 @@
             <div class="resource"><span>❤️ HP</span> <input type="number" id="hp" value="0"> / <input type="number" id="hpMax" value="0" style="width:60px;"></div>
             <div class="resource"><span>✦ STAND ENERGY</span> <input type="number" id="energy" value="0"> / <input type="number" id="energyMax" value="100" style="width:60px;"></div>
             
-            <div class="combat-stat"><div>🛡️ КД (Сила)</div><div class="combat-stat-value" id="kdStrength">0</div></div>
-            <div class="combat-stat"><div>🛡️ КД (Телосложение)</div><div class="combat-stat-value" id="kdConstitution">0</div></div>
-            <div class="combat-stat"><div>🛡️ КД (Управление)</div><div class="combat-stat-value" id="kdControl">0</div></div>
+            <div class="combat-stat">
+                <div>🛡️ КD (Защита)</div>
+                <div style="display: flex; justify-content: space-around; gap: 8px; margin-top: 6px;">
+                    <div><span style="font-size:0.7rem;">Сила</span><br><span class="combat-stat-value" id="kdStrength" style="font-size:1.2rem;">0</span></div>
+                    <div><span style="font-size:0.7rem;">Телосложение</span><br><span class="combat-stat-value" id="kdConstitution" style="font-size:1.2rem;">0</span></div>
+                    <div><span style="font-size:0.7rem;">Управление</span><br><span class="combat-stat-value" id="kdControl" style="font-size:1.2rem;">0</span></div>
+                </div>
+            </div>
             <div class="combat-stat"><div>⚡ REACTION</div><div class="combat-stat-value" id="reactionValue">0</div></div>
             <div class="combat-stat"><div>🧠 WILL</div><div class="combat-stat-value" id="willValue">0</div></div>
             
