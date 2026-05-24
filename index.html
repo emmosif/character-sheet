@@ -509,7 +509,9 @@
             <div class="resource"><span>❤️ HP</span> <input type="number" id="hp" value="0"> / <input type="number" id="hpMax" value="0" style="width:60px;"></div>
             <div class="resource"><span>✦ STAND ENERGY</span> <input type="number" id="energy" value="0"> / <input type="number" id="energyMax" value="100" style="width:60px;"></div>
             
-            <div class="combat-stat"><div>🛡️ DEFENSE (KD)</div><div class="combat-stat-value" id="kdValue">0</div></div>
+            <div class="combat-stat"><div>🛡️ КД (Сила)</div><div class="combat-stat-value" id="kdStrength">0</div></div>
+            <div class="combat-stat"><div>🛡️ КД (Телосложение)</div><div class="combat-stat-value" id="kdConstitution">0</div></div>
+            <div class="combat-stat"><div>🛡️ КД (Управление)</div><div class="combat-stat-value" id="kdControl">0</div></div>
             <div class="combat-stat"><div>⚡ REACTION</div><div class="combat-stat-value" id="reactionValue">0</div></div>
             <div class="combat-stat"><div>🧠 WILL</div><div class="combat-stat-value" id="willValue">0</div></div>
             
@@ -518,11 +520,10 @@
                 <option value="strength">Силовое оружие (Strength)</option>
                 <option value="agility">Лёгкое оружие (Agility)</option>
             </select>
-            <div class="combat-stat"><div>⚔️ MELEE</div><div class="combat-stat-value" id="meleeValue">0</div><div class="small-text">+ proficiency bonus (+2)</div></div>
+            <div class="combat-stat"><div>⚔️ MELEE</div><div class="combat-stat-value" id="meleeValue">0</div><div class="small-text">+ proficiency bonus</div></div>
             
             <h4>⌘ RANGED STYLE</h4>
-            <div class="combat-stat"><div>🏹 RANGED</div><div class="combat-stat-value" id="rangedValue">0</div><div class="small-text">+ proficiency bonus (+2 if weapon prof.)</div></div>
-            <label style="font-size:0.7rem; display:flex; align-items:center; gap:6px; margin:6px 0;"><input type="checkbox" id="rangedProf"> 🎯 владение оружием (+2)</label>
+            <div class="combat-stat"><div>🏹 RANGED</div><div class="combat-stat-value" id="rangedValue">0</div><div class="small-text">+ proficiency bonus</div></div>
             
             <div class="combat-stat"><div>🌀 STAND MOD</div><div class="combat-stat-value" id="standMod">0</div></div>
             <button class="jojo-btn" id="nextTurnBtn" style="width:100%; margin-top:8px;">◈ NEXT TURN ◈</button>
@@ -603,18 +604,20 @@
         let hpMod = getMod(u["Телосложение"]);
         let крепость = skills["Крепость Тела"];
         let maxHp = hpMod*10 + крепость;
-        let kd = 10 + getMod(u["Сила"]) + getMod(u["Управление"]) + getMod(u["Телосложение"]);
+        let kdStrength = 10 + getMod(u["Сила"]);
+        let kdConstitution = 10 + getMod(u["Телосложение"]);
+        let kdControl = 10 + getMod(u["Управление"]);
         let reaction = getMod(u["Управление"]) + skills["Точность"];
         let will = getMod(u["Мышление"]) + getMod(u["Память"]);
         let meleeType = document.getElementById("meleeType")?.value || "strength";
         let meleeStat = meleeType==="strength" ? getMod(u["Сила"]) : getMod(u["Управление"]);
-        let melee = meleeStat + getMod(u["Телосложение"]) + 2;
+        let melee = meleeStat + getMod(u["Телосложение"]);
         let rangedProf = document.getElementById("rangedProf")?.checked ? 2 : 0;
         let ranged = skills["Точность"] + getMod(u["Восприятие"]) + rangedProf;
         let totalRank=0, cnt=0;
         for(let s of STAT_LABELS){ let v = RANK_VALUES[currentData.wheelStats[s]]||0; if(v>0){ totalRank+=v; cnt++; } }
         let standMod = cnt>0 ? Math.floor(totalRank/cnt)-3 : 0;
-        return { maxHp, kd, reaction, will, melee, ranged, standMod };
+        return { maxHp, kdStrength, kdConstitution, kdControl, reaction, will, melee, ranged, standMod };
     }
     
     const canvas = document.getElementById("standWheel");
@@ -667,7 +670,9 @@
     
     function updateCombatPanel(){
         let cbt = calculateCombat();
-        document.getElementById("kdValue").innerText = cbt.kd;
+        document.getElementById("kdStrength").innerText = cbt.kdStrength;
+        document.getElementById("kdConstitution").innerText = cbt.kdConstitution;
+        document.getElementById("kdControl").innerText = cbt.kdControl;
         document.getElementById("reactionValue").innerText = cbt.reaction>=0?`+${cbt.reaction}`:cbt.reaction;
         document.getElementById("willValue").innerText = cbt.will>=0?`+${cbt.will}`:cbt.will;
         document.getElementById("meleeValue").innerText = cbt.melee>=0?`+${cbt.melee}`:cbt.melee;
