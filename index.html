@@ -847,23 +847,29 @@
         };
         reader.readAsText(file);
     }
-    function resetAll(){
-        let ew={}; STAT_LABELS.forEach(l=>ew[l]="?");
-        let eu={}; USER_STATS.forEach(s=>eu[s]=10);
-        currentData = { name:"", standName:"", standType:"close", wheelStats:ew, userStats:eu, hp:0, energy:0, hpMax:0, energyMax:100, userAbilities:[], standAbilities:[], userPortrait:"", standPortrait:"" };
-        document.getElementById("charName").value = "";
-        document.getElementById("hp").value = 0; document.getElementById("energy").value = 0;
-        let rb=document.querySelector('input[name="standType"][value="close"]'); if(rb) rb.checked=true;
-        document.getElementById("userPortraitImg").style.display="none"; document.getElementById("userPortraitPlaceholder").style.display="flex";
-        document.getElementById("standPortraitImg").style.display="none"; document.getElementById("standPortraitPlaceholder").style.display="flex";
-        buildWheelControls(); buildUserStats(); updateAll();
-        document.getElementById("turnMessage").innerHTML = "✦ new stand ✦";
-        document.getElementById("charLevel").value = ""
-        document.getElementById("hpMax").value = 0;
-        document.getElementById("energyMax").value = 100;
-        document.getElementById("hpMax").removeAttribute("data-manual");
-        document.getElementById("energyMax").removeAttribute("data-manual");
-    }
+function resetAll(){
+    let ew={}; STAT_LABELS.forEach(l=>ew[l]="?");
+    let eu={}; USER_STATS.forEach(s=>eu[s]=10);
+    currentData = { 
+        name:"", standName:"", standType:"close", wheelStats:ew, userStats:eu, 
+        hp:0, energy:0, hpMax:0, energyMax:100, userAbilities:[], standAbilities:[], 
+        userPortrait:"", standPortrait:"", level:""   // ← Добавлен level
+    };
+    document.getElementById("charName").value = "";
+    document.getElementById("hp").value = 0; document.getElementById("energy").value = 0;
+    let rb=document.querySelector('input[name="standType"][value="close"]'); if(rb) rb.checked=true;
+    document.getElementById("userPortraitImg").style.display="none"; document.getElementById("userPortraitPlaceholder").style.display="flex";
+    document.getElementById("standPortraitImg").style.display="none"; document.getElementById("standPortraitPlaceholder").style.display="flex";
+    buildWheelControls(); 
+    buildUserStats(); 
+    updateAll();
+    document.getElementById("turnMessage").innerHTML = "✦ new stand ✦";
+    document.getElementById("charLevel").value = "";
+    document.getElementById("hpMax").value = 0;
+    document.getElementById("energyMax").value = 100;
+    document.getElementById("hpMax").removeAttribute("data-manual");
+    document.getElementById("energyMax").removeAttribute("data-manual");
+}
     
     // Добавление и удаление умений
     function addUserAbility(){ let a=prompt("USER ABILITY:"); if(a?.trim()){ currentData.userAbilities.push(a.trim()); updateAll(); } }
