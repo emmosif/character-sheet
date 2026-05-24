@@ -457,7 +457,7 @@
 <body>
 <div class="container">
 <div class="stand-card">
-    <div class="jojo-tag">✦ BIZARRE STAND ✦</div>
+    <div class="jojo-tag">✦ STAND USER ✦</div>
 
     <div style="display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 20px;">
         <button class="jojo-btn" id="exportBtn">⟡ SAVE ⟡</button>
@@ -471,6 +471,7 @@
         <div class="col">
             <h3>✦ USER</h3>
             <div><label class="label-small">Имя персонажа</label><br><input type="text" id="charName" placeholder="Jolyne Cujoh" style="width:100%;"></div>
+            <div style="margin-top: 12px;"><label class="label-small">Уровень</label><br><input type="text" id="charLevel" placeholder="например: 5" style="width:100%;"></div>
             
             <h3>✦ STATS</h3>
             <div class="user-stats-grid" id="userStatsPanel"></div>
@@ -505,8 +506,8 @@
             </div>
             
             <h3>✦ COMBAT</h3>
-            <div class="resource"><span>❤️ HP</span> <input type="number" id="hp" value="0"> / <span id="hpMax">0</span></div>
-            <div class="resource"><span>✦ STAND ENERGY</span> <input type="number" id="energy" value="0"> / <span id="energyMax">100</span></div>
+            <div class="resource"><span>❤️ HP</span> <input type="number" id="hp" value="0"> / <input type="number" id="hpMax" value="0" style="width:60px;"></div>
+            <div class="resource"><span>✦ STAND ENERGY</span> <input type="number" id="energy" value="0"> / <input type="number" id="energyMax" value="100" style="width:60px;"></div>
             
             <div class="combat-stat"><div>🛡️ DEFENSE (KD)</div><div class="combat-stat-value" id="kdValue">0</div></div>
             <div class="combat-stat"><div>⚡ REACTION</div><div class="combat-stat-value" id="reactionValue">0</div></div>
@@ -566,7 +567,8 @@
         userStats: { "Сила":10,"Управление":10,"Телосложение":10,"Память":10,"Мышление":10,"Восприятие":10,"Харизма":10,"Манипуляция":10,"Притворство":10 },
         hp: 0, energy: 0, hpMax: 0, energyMax: 100,
         userAbilities: [], standAbilities: [],
-        userPortrait: "", standPortrait: ""
+        userPortrait: "", standPortrait: "",
+        level: ""
     };
     
     function getMod(v) { return Math.floor((v-10)/2); }
@@ -586,8 +588,10 @@
             "Проницательность": m("Харизма"),
             "Обаяние": m("Харизма"),
             "Принуждение": m("Манипуляция"),
-            "Запугивание": Math.max(m("Манипуляция"), m("Сила")),
-            "Убеждение": Math.max(m("Харизма"), m("Манипуляция")),
+            "Запугивание (Сила)": m("Сила"),
+            "Запугивание (Манипуляция)": m("Манипуляция"),
+            "Убеждение (Харизма)": m("Харизма"),
+            "Убеждение (Манипуляция)": m("Манипуляция"),
             "Обман": m("Притворство"),
             "Изображение": m("Притворство")
         };
@@ -669,11 +673,60 @@
         document.getElementById("meleeValue").innerText = cbt.melee>=0?`+${cbt.melee}`:cbt.melee;
         document.getElementById("rangedValue").innerText = cbt.ranged>=0?`+${cbt.ranged}`:cbt.ranged;
         document.getElementById("standMod").innerText = cbt.standMod>=0?`+${cbt.standMod}`:cbt.standMod;
-        if(currentData.hpMax !== cbt.maxHp){
-            currentData.hpMax = cbt.maxHp;
-            if(currentData.hp > currentData.hpMax) currentData.hp = currentData.hpMax;
-            document.getElementById("hpMax").innerText = currentData.hpMax;
-            document.getElementById("hp").value = currentData.hp;
+        let maxHpInput = document.getElementById("hpMax");
+        let formulaMaxHp = cbt.maxHp;
+
+// Если игрок ещё не менял вручную — обновляем по формуле
+            if (!maxHpInput.hasAttribute("data-manual")) {
+                maxHpInput.value = formulaMaxHp;
+                currentData.hpMax = formulaMaxHp;
+            } else {
+                currentData.hpMax = parseInt(maxHpInput.value) || formulaMaxHp;
+            }
+
+// Ограничиваем текущее ХП, чтобы не превышало максимум
+            if (currentData.hp > currentData.hpMax) {
+                currentData.hp = currentData.hpMax;
+                document.getElementById("hp").value = currentData.hp;
+            }
+
+// Добавляем обработчик, чтобы запомнить, что игрок менял вручную
+            if (!maxHpInput.hasListener) {
+                maxHpInput.addEventListener("change", function() {
+                this.setAttribute("data-manual", "true");
+                currentData.hpMax = parseInt(this.value) || formulaMaxHp;
+            });
+            maxHpInput.hasListener = true;
+        }
+        let energyMaxInput = document.getElementById("energyMax");
+        let formulaEnergyMax = 100; // базовая формула, можно заменить на свою, если нужна
+
+// Если игрок ещё не менял вручную — обновляем по формуле (или оставляем 100)
+            if (!energyMaxInput.hasAttribute("data-manual")) {
+                energyMaxInput.value = formulaEnergyMax;
+                currentData.energyMax = formulaEnergyMax;
+            } else {
+                currentData.energyMax = parseInt(energyMaxInput.value) || formulaEnergyMax;
+            }
+
+// Ограничиваем текущую энергию, чтобы не превышала максимум
+            if (currentData.energy > currentData.energyMax) {
+                currentData.energy = currentData.energyMax;
+                document.getElementById("energy").value = currentData.energy;
+            }
+
+// Добавляем обработчик, чтобы запомнить, что игрок менял вручную
+            if (!energyMaxInput.hasListener) {
+                  energyMaxInput.addEventListener("change", function() {
+                        this.setAttribute("data-manual", "true");
+                  currentData.energyMax = parseInt(this.value) || formulaEnergyMax;
+        // Если текущая энергия больше нового максимума — понижаем
+            if (currentData.energy > currentData.energyMax) {
+                currentData.energy = currentData.energyMax;
+                document.getElementById("energy").value = currentData.energy;
+            }
+        });
+        energyMaxInput.hasListener = true;
         }
     }
     
@@ -754,9 +807,12 @@
         currentData.name = document.getElementById("charName").value;
         currentData.hp = parseInt(document.getElementById("hp").value)||0;
         currentData.energy = parseInt(document.getElementById("energy").value)||0;
+        currentData.hpMax = document.getElementById("hpMax").value;
+        currentData.energyMax = document.getElementById("energyMax").value;
         let tr = document.querySelector('input[name="standType"]:checked');
         if(tr) currentData.standType = tr.value;
         let blob = new Blob([JSON.stringify(currentData)], {type:"application/json"});
+        currentData.level = document.getElementById("charLevel").value;
         let a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `jojo_${currentData.name||"stand"}.json`; a.click(); URL.revokeObjectURL(a.href);
     }
     function importFromFile(file){
@@ -772,6 +828,11 @@
                 if(currentData.userPortrait){ let img=document.getElementById("userPortraitImg"); img.src=currentData.userPortrait; img.style.display="block"; document.getElementById("userPortraitPlaceholder").style.display="none"; }
                 if(currentData.standPortrait){ let img=document.getElementById("standPortraitImg"); img.src=currentData.standPortrait; img.style.display="block"; document.getElementById("standPortraitPlaceholder").style.display="none"; }
                 document.getElementById("turnMessage").innerHTML = "⟡ loaded ⟡";
+                document.getElementById("charLevel").value = ld.level || ""
+                document.getElementById("hpMax").value = ld.hpMax || 0;
+                document.getElementById("energyMax").value = ld.energyMax || 100;
+                document.getElementById("hpMax").setAttribute("data-manual", "true");
+                document.getElementById("energyMax").setAttribute("data-manual", "true");
             }catch(err){ alert("corrupted file"); }
         };
         reader.readAsText(file);
@@ -787,6 +848,11 @@
         document.getElementById("standPortraitImg").style.display="none"; document.getElementById("standPortraitPlaceholder").style.display="flex";
         buildWheelControls(); buildUserStats(); updateAll();
         document.getElementById("turnMessage").innerHTML = "✦ new stand ✦";
+        document.getElementById("charLevel").value = ""
+        document.getElementById("hpMax").value = 0;
+        document.getElementById("energyMax").value = 100;
+        document.getElementById("hpMax").removeAttribute("data-manual");
+        document.getElementById("energyMax").removeAttribute("data-manual");
     }
     
     // Добавление и удаление умений
