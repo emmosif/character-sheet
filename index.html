@@ -887,6 +887,12 @@ function resetAll(){
     console.log("statsControlPanel:", document.getElementById("statsControlPanel"));
     console.log("standAbilitiesList:", document.getElementById("standAbilitiesList"));
 }
+
+    function checkElement(id) {
+    let el = document.getElementById(id);
+    if (!el) console.error("❌ Элемент не найден:", id);
+    return el;
+}
     
     // Инициализация
     window.addEventListener('DOMContentLoaded',()=>{
@@ -913,6 +919,23 @@ function resetAll(){
         updateAll();
         resetAll();
         testElements();
+        checkElement("exportBtn");
+checkElement("importBtn");
+checkElement("resetBtn");
+checkElement("nextTurnBtn");
+checkElement("addUserAbilityBtn");
+checkElement("addStandAbilityBtn");
+checkElement("fileInput");
+checkElement("charName");
+checkElement("hp");
+checkElement("energy");
+checkElement("meleeType");
+checkElement("rangedProf");
+checkElement("standWheel");
+checkElement("userAbilitiesList");
+checkElement("standAbilitiesList");
+checkElement("userPortraitFrame");
+checkElement("standPortraitFrame");
     });
 </script>
 </body>
