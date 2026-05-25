@@ -617,7 +617,7 @@
         let meleeType = document.getElementById("meleeType")?.value || "strength";
         let meleeStat = meleeType==="strength" ? getMod(u["Сила"]) : getMod(u["Управление"]);
         let melee = meleeStat + getMod(u["Телосложение"]);
-        let rangedProf = document.getElementById("rangedProf")?.checked ? 2 : 0;
+        let rangedProf = 0; // бонус мастерства убран
         let ranged = skills["Точность"] + getMod(u["Восприятие"]) + rangedProf;
         let totalRank=0, cnt=0;
         for(let s of STAT_LABELS){ let v = RANK_VALUES[currentData.wheelStats[s]]||0; if(v>0){ totalRank+=v; cnt++; } }
@@ -881,19 +881,6 @@ function resetAll(){
     function nextTurn(){ document.getElementById("turnMessage").innerHTML = "◈ ZA WARUDO! ◈"; }
     function promptStandName(){ let n=prompt("STAND NAME:", currentData.standName||"My Stand"); if(n!==null){ currentData.standName=n.trim()||""; drawWheel(); } }
 
-    function testElements() {
-    console.log("userStatsPanel:", document.getElementById("userStatsPanel"));
-    console.log("skillsPanel:", document.getElementById("skillsPanel"));
-    console.log("statsControlPanel:", document.getElementById("statsControlPanel"));
-    console.log("standAbilitiesList:", document.getElementById("standAbilitiesList"));
-}
-
-    function checkElement(id) {
-    let el = document.getElementById(id);
-    if (!el) console.error("❌ Элемент не найден:", id);
-    return el;
-}
-    
     // Инициализация
     window.addEventListener('DOMContentLoaded',()=>{
         document.getElementById("exportBtn").addEventListener("click",exportChar);
@@ -907,7 +894,7 @@ function resetAll(){
         document.getElementById("hp").addEventListener("input",e=>currentData.hp=parseInt(e.target.value)||0);
         document.getElementById("energy").addEventListener("input",e=>currentData.energy=parseInt(e.target.value)||0);
         document.getElementById("meleeType").addEventListener("change",()=>updateAll());
-        document.getElementById("rangedProf").addEventListener("change",()=>updateAll());
+//        document.getElementById("rangedProf").addEventListener("change",()=>updateAll());
         document.querySelectorAll('input[name="standType"]').forEach(r=>r.addEventListener("change",()=>{ if(r.checked) currentData.standType=r.value; updateAll(); }));
         document.getElementById("standWheel").addEventListener("dblclick",promptStandName);
         document.getElementById("userAbilitiesList").addEventListener("click",removeAbility);
@@ -918,24 +905,6 @@ function resetAll(){
         buildUserStats();
         updateAll();
         resetAll();
-        testElements();
-        checkElement("exportBtn");
-checkElement("importBtn");
-checkElement("resetBtn");
-checkElement("nextTurnBtn");
-checkElement("addUserAbilityBtn");
-checkElement("addStandAbilityBtn");
-checkElement("fileInput");
-checkElement("charName");
-checkElement("hp");
-checkElement("energy");
-checkElement("meleeType");
-checkElement("rangedProf");
-checkElement("standWheel");
-checkElement("userAbilitiesList");
-checkElement("standAbilitiesList");
-checkElement("userPortraitFrame");
-checkElement("standPortraitFrame");
     });
 </script>
 </body>
