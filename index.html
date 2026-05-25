@@ -648,7 +648,8 @@
         userAbilities: [], standAbilities: [],
         // структура каждого умения: { name: "", description: "", type: "", energyCost: 0, ... }
         userPortrait: "", standPortrait: "",
-        level: ""
+        level: "",
+        energy: 0
     };
     
     function getMod(v) { return Math.floor((v-10)/2); }
@@ -1109,7 +1110,34 @@ function addStandAbility() {
     }
 }
     
-    function nextTurn(){ document.getElementById("turnMessage").innerHTML = "◈ ZA WARUDO! ◈"; }
+    function nextTurn(){
+    let currentEnergy = currentData.energy;
+    let maxEnergy = currentData.energyMax;
+    
+    // Вычисляем, сколько энергии потрачено
+    let spentPercent = ((maxEnergy - currentEnergy) / maxEnergy) * 100;
+    
+    // Проверяем, потрачено ли более 50%
+    if (spentPercent > 50) {
+        // Восстанавливаем 30 очков
+        let newEnergy = currentEnergy + 30;
+        
+        // Ограничиваем: не выше 75% от максимума
+        let maxRecover = maxEnergy * 0.75;
+        if (newEnergy > maxRecover) {
+            newEnergy = maxRecover;
+        }
+        
+        currentData.energy = Math.floor(newEnergy);
+        document.getElementById("energy").value = currentData.energy;
+        
+        document.getElementById("turnMessage").innerHTML = `⚡ Восстановлено 30 энергии! (Потрачено ${Math.floor(spentPercent)}%) ⚡`;
+    } else {
+        document.getElementById("turnMessage").innerHTML = "❌ Потрачено менее 50% энергии. Восстановление невозможно.";
+    }
+    
+    updateAll();
+}
     function promptStandName(){ let n=prompt("STAND NAME:", currentData.standName||"My Stand"); if(n!==null){ currentData.standName=n.trim()||""; drawWheel(); } }
 
     // Инициализация
