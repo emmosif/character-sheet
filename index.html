@@ -452,6 +452,56 @@
         .skills-grid::-webkit-scrollbar-thumb {
             background: #b87a34;
         }
+    .ability-card {
+    background: #2a3520;
+    border-left: 3px solid #dc8627;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    position: relative;
+    font-size: 0.75rem;
+}
+
+.ability-name {
+    font-weight: bold;
+    color: #e0aa5e;
+    margin-bottom: 4px;
+}
+
+.ability-desc {
+    color: #cfc294;
+    font-size: 0.7rem;
+    margin-bottom: 4px;
+}
+
+.ability-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 0.65rem;
+    color: #b88a4a;
+}
+
+.ability-type {
+    background: #1a2415;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.ability-cost {
+    color: #e0aa5e;
+}
+
+.remove-ability {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    cursor: pointer;
+    color: #b88a4a;
+    font-size: 0.7rem;
+}
+
+.remove-ability:hover {
+    color: #dc8627;
+}
     </style>
 </head>
 <body>
@@ -573,6 +623,7 @@
         userStats: { "Сила":10,"Управление":10,"Телосложение":10,"Память":10,"Мышление":10,"Восприятие":10,"Харизма":10,"Манипуляция":10,"Притворство":10 },
         hp: 0, energy: 0, hpMax: 0, energyMax: 100,
         userAbilities: [], standAbilities: [],
+        // структура каждого умения: { name: "", description: "", type: "", energyCost: 0, ... }
         userPortrait: "", standPortrait: "",
         level: ""
     };
@@ -741,19 +792,54 @@
     }
     
     function updateLists(){
-        let userDiv = document.getElementById("userAbilitiesList");
-        if(userDiv){
-            userDiv.innerHTML = "";
-            if(currentData.userAbilities.length===0) userDiv.innerHTML = "<div class='label-small'>—— none ——</div>";
-            else currentData.userAbilities.forEach((a,idx)=>{ let tag=document.createElement("div"); tag.className="ability-tag"; tag.innerHTML=`${a} <span data-user-idx="${idx}" class="remove-user-ability" style="cursor:pointer;">✖</span>`; userDiv.appendChild(tag); });
-        }
-        let standDiv = document.getElementById("standAbilitiesList");
-        if(standDiv){
-            standDiv.innerHTML = "";
-            if(currentData.standAbilities.length===0) standDiv.innerHTML = "<div class='label-small'>—— none ——</div>";
-            else currentData.standAbilities.forEach((a,idx)=>{ let tag=document.createElement("div"); tag.className="ability-tag"; tag.innerHTML=`${a} <span data-stand-idx="${idx}" class="remove-stand-ability" style="cursor:pointer;">✖</span>`; standDiv.appendChild(tag); });
+    // Умения юзера
+    let userDiv = document.getElementById("userAbilitiesList");
+    if(userDiv){
+        userDiv.innerHTML = "";
+        if(currentData.userAbilities.length === 0){
+            userDiv.innerHTML = "<div class='label-small'>—— none ——</div>";
+        } else {
+            currentData.userAbilities.forEach((ability, idx) => {
+                let card = document.createElement("div");
+                card.className = "ability-card";
+                card.innerHTML = `
+                    <div class="ability-name">✦ ${ability.name}</div>
+                    <div class="ability-desc">${ability.description || "—"}</div>
+                    <div class="ability-meta">
+                        <span class="ability-type">${ability.type}</span>
+                        <span class="ability-cost">⚡ ${ability.energyCost}</span>
+                    </div>
+                    <span data-user-idx="${idx}" class="remove-ability">✖</span>
+                `;
+                userDiv.appendChild(card);
+            });
         }
     }
+    
+    // Способности стенда
+    let standDiv = document.getElementById("standAbilitiesList");
+    if(standDiv){
+        standDiv.innerHTML = "";
+        if(currentData.standAbilities.length === 0){
+            standDiv.innerHTML = "<div class='label-small'>—— none ——</div>";
+        } else {
+            currentData.standAbilities.forEach((ability, idx) => {
+                let card = document.createElement("div");
+                card.className = "ability-card";
+                card.innerHTML = `
+                    <div class="ability-name">🌀 ${ability.name}</div>
+                    <div class="ability-desc">${ability.description || "—"}</div>
+                    <div class="ability-meta">
+                        <span class="ability-type">${ability.type}</span>
+                        <span class="ability-cost">⚡ ${ability.energyCost}</span>
+                    </div>
+                    <span data-stand-idx="${idx}" class="remove-ability">✖</span>
+                `;
+                standDiv.appendChild(card);
+            });
+        }
+    }
+}
     
     function updateAll(){
         drawWheel();
@@ -872,12 +958,51 @@ function resetAll(){
 }
     
     // Добавление и удаление умений
-    function addUserAbility(){ let a=prompt("USER ABILITY:"); if(a?.trim()){ currentData.userAbilities.push(a.trim()); updateAll(); } }
-    function addStandAbility(){ let a=prompt("STAND ABILITY:"); if(a?.trim()){ currentData.standAbilities.push(a.trim()); updateAll(); } }
-    function removeAbility(e){
-        if(e.target.classList.contains("remove-user-ability")){ let idx=parseInt(e.target.getAttribute("data-user-idx")); if(!isNaN(idx)){ currentData.userAbilities.splice(idx,1); updateAll(); } }
-        if(e.target.classList.contains("remove-stand-ability")){ let idx=parseInt(e.target.getAttribute("data-stand-idx")); if(!isNaN(idx)){ currentData.standAbilities.splice(idx,1); updateAll(); } }
+    function addUserAbility(){
+        let name = prompt("Название умения:");
+        if(!name?.trim()) return;
+        let description = prompt("Описание:");
+        let type = prompt("Тип умения (Атака/Защита/Поддержка/Пассивное):") || "Атака";
+        let energyCost = parseInt(prompt("Стоимость энергии:", "0")) || 0;
+    
+        currentData.userAbilities.push({
+            name: name.trim(),
+            description: description || "",
+            type: type,
+            energyCost: energyCost
+        });
+        updateAll();
     }
+    
+    function addStandAbility(){
+        let name = prompt("Название способности стенда:");
+        if(!name?.trim()) return;
+        let description = prompt("Описание:");
+        let type = prompt("Тип (Атака/Защита/Поддержка/Пассивное):") || "Атака";
+        let energyCost = parseInt(prompt("Стоимость энергии:", "0")) || 0;
+    
+        currentData.standAbilities.push({
+            name: name.trim(),
+            description: description || "",
+            type: type,
+            energyCost: energyCost
+        });
+        updateAll();
+    }
+    
+    function removeAbility(e){
+    if(e.target.classList.contains("remove-ability")){
+        if(e.target.hasAttribute("data-user-idx")){
+            let idx = parseInt(e.target.getAttribute("data-user-idx"));
+            if(!isNaN(idx)){ currentData.userAbilities.splice(idx,1); updateAll(); }
+        }
+        if(e.target.hasAttribute("data-stand-idx")){
+            let idx = parseInt(e.target.getAttribute("data-stand-idx"));
+            if(!isNaN(idx)){ currentData.standAbilities.splice(idx,1); updateAll(); }
+        }
+    }
+}
+    
     function nextTurn(){ document.getElementById("turnMessage").innerHTML = "◈ ZA WARUDO! ◈"; }
     function promptStandName(){ let n=prompt("STAND NAME:", currentData.standName||"My Stand"); if(n!==null){ currentData.standName=n.trim()||""; drawWheel(); } }
 
