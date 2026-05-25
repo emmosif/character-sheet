@@ -1113,24 +1113,23 @@ function addStandAbility() {
     function nextTurn(){
     let currentEnergy = currentData.energy;
     let maxEnergy = currentData.energyMax;
+    let maxAllowed = maxEnergy * 0.75; // 75% от максимума
     
-    // Условие: текущая энергия ниже 50% (то есть потрачено более 50%)
-    if (currentEnergy < maxEnergy * 0.5) {
-        // Восстанавливаем 30 очков, но не выше 75% от максимума
-        let newEnergy = currentEnergy + 30;
-        let maxRecover = maxEnergy * 0.75;
-        
-        if (newEnergy > maxRecover) {
-            newEnergy = maxRecover;
-        }
-        
+    // Восстанавливаем 30 очков
+    let newEnergy = currentEnergy + 30;
+    
+    // Не выше 75%
+    if (newEnergy > maxAllowed) {
+        newEnergy = maxAllowed;
+    }
+    
+    // Если энергия уже выше 75% — ничего не делаем
+    if (currentEnergy >= maxAllowed) {
+        document.getElementById("turnMessage").innerHTML = `❌ Энергия уже выше 75% (${currentEnergy}/${maxEnergy}). Восстановление невозможно.`;
+    } else {
         currentData.energy = Math.floor(newEnergy);
         document.getElementById("energy").value = currentData.energy;
-        
-        let spentPercent = Math.floor(((maxEnergy - currentEnergy) / maxEnergy) * 100);
-        document.getElementById("turnMessage").innerHTML = `⚡ Восстановлено до ${Math.floor(newEnergy)}! (Было потрачено ${spentPercent}%) ⚡`;
-    } else {
-        document.getElementById("turnMessage").innerHTML = `❌ Энергия выше 50% (${currentEnergy}/${maxEnergy}). Восстановление невозможно.`;
+        document.getElementById("turnMessage").innerHTML = `⚡ Восстановлено 30! ${Math.floor(currentEnergy)} → ${Math.floor(newEnergy)} ⚡`;
     }
     
     updateAll();
