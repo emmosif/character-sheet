@@ -502,6 +502,29 @@
 .remove-ability:hover {
     color: #dc8627;
 }
+    .ability-actions {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    display: flex;
+    gap: 8px;
+}
+
+.ability-actions span {
+    cursor: pointer;
+    color: #b88a4a;
+    font-size: 0.7rem;
+}
+
+.ability-actions span:hover {
+    color: #dc8627;
+}
+
+.ability-extra {
+    font-size: 0.6rem;
+    color: #ad9a62;
+    margin-left: 6px;
+}
     </style>
 </head>
 <body>
@@ -791,7 +814,7 @@
         }
     }
     
-    function updateLists(){
+function updateLists(){
     // Умения юзера
     let userDiv = document.getElementById("userAbilitiesList");
     if(userDiv){
@@ -808,8 +831,12 @@
                     <div class="ability-meta">
                         <span class="ability-type">${ability.type}</span>
                         <span class="ability-cost">⚡ ${ability.energyCost}</span>
+                        ${ability.extra ? `<span class="ability-extra">📎 ${ability.extra}</span>` : ""}
                     </div>
-                    <span data-user-idx="${idx}" class="remove-ability">✖</span>
+                    <div class="ability-actions">
+                        <span data-user-idx="${idx}" class="edit-ability" data-type="user">✎</span>
+                        <span data-user-idx="${idx}" class="remove-ability" data-type="user">✖</span>
+                    </div>
                 `;
                 userDiv.appendChild(card);
             });
@@ -832,8 +859,12 @@
                     <div class="ability-meta">
                         <span class="ability-type">${ability.type}</span>
                         <span class="ability-cost">⚡ ${ability.energyCost}</span>
+                        ${ability.extra ? `<span class="ability-extra">📎 ${ability.extra}</span>` : ""}
                     </div>
-                    <span data-stand-idx="${idx}" class="remove-ability">✖</span>
+                    <div class="ability-actions">
+                        <span data-stand-idx="${idx}" class="edit-ability" data-type="stand">✎</span>
+                        <span data-stand-idx="${idx}" class="remove-ability" data-type="stand">✖</span>
+                    </div>
                 `;
                 standDiv.appendChild(card);
             });
@@ -958,47 +989,122 @@ function resetAll(){
 }
     
     // Добавление и удаление умений
-    function addUserAbility(){
-        let name = prompt("Название умения:");
-        if(!name?.trim()) return;
-        let description = prompt("Описание:");
-        let type = prompt("Тип умения (Атака/Защита/Поддержка/Пассивное):") || "Атака";
-        let energyCost = parseInt(prompt("Стоимость энергии:", "0")) || 0;
+    let currentEditType = "user"; // user или stand
+let currentEditIndex = -1;
+
+function openAbilityModal(type, index = -1) {
+    currentEditType = type;
+    currentEditIndex = index;
     
-        currentData.userAbilities.push({
-            name: name.trim(),
-            description: description || "",
-            type: type,
-            energyCost: energyCost
-        });
-        updateAll();
-    }
+    let modal = document.getElementById("abilityModal");
+    let title = document.getElementById("modalTitle");
+    let nameInput = document.getElementById("abilityName");
+    let descInput = document.getElementById("abilityDesc");
+    let typeSelect = document.getElementById("abilityType");
+    let costInput = document.getElementById("abilityEnergyCost");
+    let extraInput = document.getElementById("abilityExtra");
     
-    function addStandAbility(){
-        let name = prompt("Название способности стенда:");
-        if(!name?.trim()) return;
-        let description = prompt("Описание:");
-        let type = prompt("Тип (Атака/Защита/Поддержка/Пассивное):") || "Атака";
-        let energyCost = parseInt(prompt("Стоимость энергии:", "0")) || 0;
-    
-        currentData.standAbilities.push({
-            name: name.trim(),
-            description: description || "",
-            type: type,
-            energyCost: energyCost
-        });
-        updateAll();
-    }
-    
-    function removeAbility(e){
-    if(e.target.classList.contains("remove-ability")){
-        if(e.target.hasAttribute("data-user-idx")){
-            let idx = parseInt(e.target.getAttribute("data-user-idx"));
-            if(!isNaN(idx)){ currentData.userAbilities.splice(idx,1); updateAll(); }
+    if (index >= 0) {
+        // Режим редактирования
+        if (type === "user") {
+            title.innerText = "✦ Редактировать умение юзера";
+        } else {
+            title.innerText = "✦ Редактировать способность стенда";
         }
-        if(e.target.hasAttribute("data-stand-idx")){
-            let idx = parseInt(e.target.getAttribute("data-stand-idx"));
-            if(!isNaN(idx)){ currentData.standAbilities.splice(idx,1); updateAll(); }
+        let ability = type === "user" ? currentData.userAbilities[index] : currentData.standAbilities[index];
+        if (ability) {
+            nameInput.value = ability.name || "";
+            descInput.value = ability.description || "";
+            typeSelect.value = ability.type || "Атака";
+            costInput.value = ability.energyCost || 0;
+            extraInput.value = ability.extra || "";
+        }
+    } else {
+        // Режим добавления
+        if (type === "user") {
+            title.innerText = "✦ Новое умение юзера";
+        } else {
+            title.innerText = "✦ Новая способность стенда";
+        }
+        nameInput.value = "";
+        descInput.value = "";
+        typeSelect.value = "Атака";
+        costInput.value = 0;
+        extraInput.value = "";
+    }
+    
+    modal.style.display = "flex";
+}
+
+function closeAbilityModal() {
+    document.getElementById("abilityModal").style.display = "none";
+    currentEditIndex = -1;
+}
+
+function saveAbility() {
+    let name = document.getElementById("abilityName").value.trim();
+    if (!name) {
+        alert("Введите название умения!");
+        return;
+    }
+    
+    let ability = {
+        name: name,
+        description: document.getElementById("abilityDesc").value || "",
+        type: document.getElementById("abilityType").value,
+        energyCost: parseInt(document.getElementById("abilityEnergyCost").value) || 0,
+        extra: document.getElementById("abilityExtra").value || ""
+    };
+    
+    if (currentEditIndex >= 0) {
+        // Редактирование
+        if (currentEditType === "user") {
+            currentData.userAbilities[currentEditIndex] = ability;
+        } else {
+            currentData.standAbilities[currentEditIndex] = ability;
+        }
+    } else {
+        // Добавление
+        if (currentEditType === "user") {
+            currentData.userAbilities.push(ability);
+        } else {
+            currentData.standAbilities.push(ability);
+        }
+    }
+    
+    closeAbilityModal();
+    updateAll();
+}
+
+// Новые функции вместо старых addUserAbility / addStandAbility
+function addUserAbility() { 
+    openAbilityModal("user"); 
+}
+
+function addStandAbility() { 
+    openAbilityModal("stand"); 
+}
+    
+    function handleAbilityActions(e){
+    let target = e.target;
+    
+    // Удаление
+    if(target.classList.contains("remove-ability")){
+        let type = target.getAttribute("data-type");
+        let idx = parseInt(target.getAttribute(type === "user" ? "data-user-idx" : "data-stand-idx"));
+        if(!isNaN(idx)){
+            if(type === "user") currentData.userAbilities.splice(idx, 1);
+            else currentData.standAbilities.splice(idx, 1);
+            updateAll();
+        }
+    }
+    
+    // Редактирование
+    if(target.classList.contains("edit-ability")){
+        let type = target.getAttribute("data-type");
+        let idx = parseInt(target.getAttribute(type === "user" ? "data-user-idx" : "data-stand-idx"));
+        if(!isNaN(idx)){
+            openAbilityModal(type, idx);
         }
     }
 }
@@ -1008,6 +1114,12 @@ function resetAll(){
 
     // Инициализация
     window.addEventListener('DOMContentLoaded',()=>{
+        document.getElementById("saveAbilityBtn").addEventListener("click", saveAbility);
+document.getElementById("closeModalBtn").addEventListener("click", closeAbilityModal);
+// Клик вне окна для закрытия
+document.getElementById("abilityModal").addEventListener("click", (e) => {
+    if (e.target === document.getElementById("abilityModal")) closeAbilityModal();
+});
         document.getElementById("exportBtn").addEventListener("click",exportChar);
         document.getElementById("importBtn").addEventListener("click",()=>document.getElementById("fileInput").click());
         document.getElementById("resetBtn").addEventListener("click",resetAll);
@@ -1022,8 +1134,8 @@ function resetAll(){
 //        document.getElementById("rangedProf").addEventListener("change",()=>updateAll());
         document.querySelectorAll('input[name="standType"]').forEach(r=>r.addEventListener("change",()=>{ if(r.checked) currentData.standType=r.value; updateAll(); }));
         document.getElementById("standWheel").addEventListener("dblclick",promptStandName);
-        document.getElementById("userAbilitiesList").addEventListener("click",removeAbility);
-        document.getElementById("standAbilitiesList").addEventListener("click",removeAbility);
+        document.getElementById("userAbilitiesList").addEventListener("click", handleAbilityActions);
+        document.getElementById("standAbilitiesList").addEventListener("click", handleAbilityActions);
         setupPortrait("userPortraitFrame","userPortraitInput","userPortraitImg","userPortraitPlaceholder","userPortrait");
         setupPortrait("standPortraitFrame","standPortraitInput","standPortraitImg","standPortraitPlaceholder","standPortrait");
         buildWheelControls();
@@ -1032,5 +1144,49 @@ function resetAll(){
         resetAll();
     });
 </script>
+    <!-- Модальное окно для добавления/редактирования умений -->
+<div id="abilityModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
+    <div style="background:#2a3520; border:2px solid #dc8627; padding:24px; width:90%; max-width:450px; border-radius:8px;">
+        <h3 id="modalTitle" style="color:#e0aa5e; margin-bottom:16px;">✦ Добавить умение</h3>
+        <input type="hidden" id="editAbilityIndex" value="-1">
+        <input type="hidden" id="editAbilityType" value="user">
+        
+        <div style="margin-bottom:12px;">
+            <label style="color:#cfc294;">Название</label>
+            <input type="text" id="abilityName" style="width:100%; background:#1a2415; border:1px solid #b87a34; color:#f0ddb0; padding:6px;">
+        </div>
+        
+        <div style="margin-bottom:12px;">
+            <label style="color:#cfc294;">Описание</label>
+            <textarea id="abilityDesc" rows="3" style="width:100%; background:#1a2415; border:1px solid #b87a34; color:#f0ddb0; padding:6px;"></textarea>
+        </div>
+        
+        <div style="margin-bottom:12px;">
+            <label style="color:#cfc294;">Тип умения</label>
+            <select id="abilityType" style="width:100%; background:#1a2415; border:1px solid #b87a34; color:#f0ddb0; padding:6px;">
+                <option value="Атака">⚔️ Атака</option>
+                <option value="Защита">🛡️ Защита</option>
+                <option value="Поддержка">💚 Поддержка</option>
+                <option value="Пассивное">🌀 Пассивное</option>
+                <option value="Особое">⭐ Особое</option>
+            </select>
+        </div>
+        
+        <div style="margin-bottom:12px;">
+            <label style="color:#cfc294;">Стоимость энергии</label>
+            <input type="number" id="abilityEnergyCost" value="0" style="width:100%; background:#1a2415; border:1px solid #b87a34; color:#f0ddb0; padding:6px;">
+        </div>
+        
+        <div style="margin-bottom:12px;">
+            <label style="color:#cfc294;">Доп. поле (урон/дальность)</label>
+            <input type="text" id="abilityExtra" placeholder="например: 2к6 урона / 10м" style="width:100%; background:#1a2415; border:1px solid #b87a34; color:#f0ddb0; padding:6px;">
+        </div>
+        
+        <div style="display:flex; gap:12px; margin-top:20px;">
+            <button id="saveAbilityBtn" style="flex:1; background:#dc8627; border:none; color:#141f0e; padding:8px; cursor:pointer;">✦ СОХРАНИТЬ</button>
+            <button id="closeModalBtn" style="flex:1; background:#3a3020; border:1px solid #b87a34; color:#cfc294; padding:8px; cursor:pointer;">ОТМЕНА</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
