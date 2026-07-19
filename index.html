@@ -658,6 +658,7 @@
         // структура каждого умения: { name: "", description: "", type: "", energyCost: 0, ... }
         userPortrait: "", standPortrait: "",
         level: "",
+        profBonus: "",
         energy: 0
     };
     
@@ -999,6 +1000,7 @@ function updateLists(){
         if(tr) currentData.standType = tr.value;
         let blob = new Blob([JSON.stringify(currentData)], {type:"application/json"});
         currentData.level = document.getElementById("charLevel").value;
+        currentData.profBonus = document.getElementById("charProfBonus").value;
         let a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `jojo_${currentData.name||"stand"}.json`; a.click(); URL.revokeObjectURL(a.href);
     }
     function importFromFile(file){
@@ -1014,7 +1016,8 @@ function updateLists(){
                 if(currentData.userPortrait){ let img=document.getElementById("userPortraitImg"); img.src=currentData.userPortrait; img.style.display="block"; document.getElementById("userPortraitPlaceholder").style.display="none"; }
                 if(currentData.standPortrait){ let img=document.getElementById("standPortraitImg"); img.src=currentData.standPortrait; img.style.display="block"; document.getElementById("standPortraitPlaceholder").style.display="none"; }
                 document.getElementById("turnMessage").innerHTML = "⟡ loaded ⟡";
-                document.getElementById("charLevel").value = ld.level || ""
+                document.getElementById("charLevel").value = ld.level || "";
+                document.getElementById("charProfBonus").value = ld.profBonus || "+2";
                 document.getElementById("hpMax").value = ld.hpMax || 0;
                 document.getElementById("energyMax").value = ld.energyMax || 100;
                 document.getElementById("hpMax").setAttribute("data-manual", "true");
@@ -1041,6 +1044,7 @@ function resetAll(){
     updateAll();
     document.getElementById("turnMessage").innerHTML = "✦ new stand ✦";
     document.getElementById("charLevel").value = "";
+    document.getElementById("charProfBonus").value = "";
     document.getElementById("hpMax").value = 0;
     document.getElementById("energyMax").value = 100;
     document.getElementById("hpMax").removeAttribute("data-manual");
