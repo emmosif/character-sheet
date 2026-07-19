@@ -733,26 +733,56 @@
             for(let p of pts){ ctx.beginPath(); ctx.arc(p.x,p.y,3,0,2*Math.PI); ctx.fillStyle="#c2852c"; ctx.fill(); }
         }
         ctx.beginPath(); ctx.arc(cx,cy,innerR-3,0,2*Math.PI); ctx.fillStyle="#fdf9ed"; ctx.fill(); ctx.strokeStyle="#b89a4a"; ctx.stroke();
-        // Отображение названия стенда в центре (полностью, с авторазмером)
+        // ===== ОТОБРАЖЕНИЕ НАЗВАНИЯ СТЕНДА С ПЕРЕНОСОМ =====
 let standName = currentData.standName || "STAND";
-let maxWidth = innerR * 1.4; // максимальная ширина текста (внутренняя окружность)
-let fontSize = 9; // стартовый размер
-
-// Проверяем, влезает ли название
-ctx.font = `bold ${fontSize}px 'Montserrat'`;
-let textWidth = ctx.measureText(standName).width;
-
-// Если не влезает — уменьшаем шрифт
-while (textWidth > maxWidth && fontSize > 6) {
-    fontSize -= 0.5;
-    ctx.font = `bold ${fontSize}px 'Montserrat'`;
-    textWidth = ctx.measureText(standName).width;
-}
-
-ctx.fillStyle = "#b5731a";
+let maxWidth = innerR * 1.2; // максимальная ширина текста
+let fontSize = 10; // стартовый размер
 ctx.textAlign = "center";
 ctx.textBaseline = "middle";
-ctx.fillText(standName, cx, cy + 1);
+
+// Функция для разбивки текста на строки с переносом
+function wrapText(text, maxWidth, fontSize) {
+    ctx.font = `bold ${fontSize}px 'Montserrat'`;
+    let words = text.split(' ');
+    let lines = [];
+    let currentLine = '';
+    
+    for (let word of words) {
+        let testLine = currentLine ? currentLine + ' ' + word : word;
+        let metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth && currentLine) {
+            lines.push(currentLine);
+            currentLine = word;
+        } else {
+            currentLine = testLine;
+        }
+    }
+    if (currentLine) lines.push(currentLine);
+    return lines;
+}
+
+// Пробуем разные размеры шрифта, чтобы влезло максимум строк
+let lines = wrapText(standName, maxWidth, fontSize);
+let lineHeight = fontSize * 1.4;
+let totalHeight = lines.length * lineHeight;
+let maxHeight = innerR * 1.2; // максимальная высота для текста
+
+// Если не влезает по высоте — уменьшаем шрифт
+while (totalHeight > maxHeight && fontSize > 6) {
+    fontSize -= 0.5;
+    lineHeight = fontSize * 1.4;
+    lines = wrapText(standName, maxWidth, fontSize);
+    totalHeight = lines.length * lineHeight;
+}
+
+// Рисуем строки
+let startY = cy - (lines.length - 1) * lineHeight / 2;
+ctx.font = `bold ${fontSize}px 'Montserrat'`;
+ctx.fillStyle = "#b5731a";
+for (let i = 0; i < lines.length; i++) {
+    let y = startY + i * lineHeight;
+    ctx.fillText(lines[i], cx, y + 1);
+}
     }
     
     // === ОБНОВЛЕНИЯ ===
