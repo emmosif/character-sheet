@@ -554,7 +554,7 @@
             
             <h3>✦ USER ABILITIES</h3>
             <div id="userAbilitiesList" class="abilities-list"></div>
-            <button class="jojo-btn" id="addUserAbilityBtn">+ ADD MOVE</button>
+            <button class="jojo-btn" id="addUserAbilityBtn">+ ДОБАВИТЬ</button>
         </div>
         
         <!-- КОЛОНКА 2: ПОРТРЕТЫ + БОЙ -->
@@ -580,31 +580,31 @@
             
             <h3>✦ COMBAT</h3>
             <div class="resource"><span>❤️ HP</span> <input type="number" id="hp" value="0"> / <input type="number" id="hpMax" value="0" style="width:60px;"></div>
-            <div class="resource"><span>✦ STAND ENERGY</span> <input type="number" id="energy" value="0"> / <input type="number" id="energyMax" value="100" style="width:60px;"></div>
+            <div class="resource"><span>✦ ЭНЕРГИЯ СТАНДА</span> <input type="number" id="energy" value="0"> / <input type="number" id="energyMax" value="100" style="width:60px;"></div>
             
             <div class="combat-stat">
-                <div>🛡️ DEFENSE (KD)</div>
+                <div>🛡️ ЗАЩИТА (КД)</div>
                 <div style="display: flex; justify-content: space-around; gap: 8px; margin-top: 6px;">
                     <div><span style="font-size:0.7rem;">Сила</span><br><span class="combat-stat-value" id="kdStrength" style="font-size:1.2rem;">0</span></div>
                     <div><span style="font-size:0.7rem;">Телосложение</span><br><span class="combat-stat-value" id="kdConstitution" style="font-size:1.2rem;">0</span></div>
                     <div><span style="font-size:0.7rem;">Управление</span><br><span class="combat-stat-value" id="kdControl" style="font-size:1.2rem;">0</span></div>
                 </div>
             </div>
-            <div class="combat-stat"><div>⚡ REACTION</div><div class="combat-stat-value" id="reactionValue">0</div></div>
-            <div class="combat-stat"><div>🧠 WILL</div><div class="combat-stat-value" id="willValue">0</div></div>
+            <div class="combat-stat"><div>⚡ РЕАКЦИЯ</div><div class="combat-stat-value" id="reactionValue">0</div></div>
+            <div class="combat-stat"><div>🧠 ВОЛЯ</div><div class="combat-stat-value" id="willValue">0</div></div>
             
             <h4>⌘ MELEE STYLE</h4>
             <select id="meleeType" class="weapon-select">
-                <option value="strength">Силовое оружие (Strength)</option>
-                <option value="agility">Лёгкое оружие (Agility)</option>
+                <option value="strength">Тяжелое оружие</option>
+                <option value="agility">Лёгкое оружие</option>
             </select>
-            <div class="combat-stat"><div>⚔️ MELEE</div><div class="combat-stat-value" id="meleeValue">0</div><div class="small-text">+ proficiency bonus</div></div>
+            <div class="combat-stat"><div>⚔️ БЛИЖНИЙ БОЙ</div><div class="combat-stat-value" id="meleeValue">0</div><div class="small-text">+ бонус мастерства</div></div>
             
             <h4>⌘ RANGED STYLE</h4>
-            <div class="combat-stat"><div>🏹 RANGED</div><div class="combat-stat-value" id="rangedValue">0</div><div class="small-text">+ proficiency bonus</div></div>
+            <div class="combat-stat"><div>🏹 ДАЛЬНИЙ БОЙ</div><div class="combat-stat-value" id="rangedValue">0</div><div class="small-text">+ бонус мастерства</div></div>
             
-            <div class="combat-stat"><div>🌀 STAND MOD</div><div class="combat-stat-value" id="standMod">0</div></div>
-            <button class="jojo-btn" id="nextTurnBtn" style="width:100%; margin-top:8px;">◈ NEXT TURN ◈</button>
+            <div class="combat-stat"><div>🌀 БОЙ СТАНДОМ</div><div class="combat-stat-value" id="standMod">0</div></div>
+            <button class="jojo-btn" id="nextTurnBtn" style="width:100%; margin-top:8px;">◈ СЛЕДУЮЩИЙ ХОД ◈</button>
             <div id="turnMessage" style="text-align:center; margin-top:10px; font-size:0.7rem; font-style:italic; color:#ad9a62;">—— bizarre adventure ——</div>
         </div>
         
@@ -625,7 +625,7 @@
             
             <h3>✦ STAND ABILITIES</h3>
             <div id="standAbilitiesList" class="abilities-list"></div>
-            <button class="jojo-btn" id="addStandAbilityBtn">+ ADD ABILITY</button>
+            <button class="jojo-btn" id="addStandAbilityBtn">+ ДОБАВИТЬ</button>
         </div>
     </div>
 </div>
