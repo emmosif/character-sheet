@@ -694,9 +694,9 @@
         let hpMod = getMod(u["Телосложение"]);
         let крепость = skills["Крепость Тела"];
         let maxHp = hpMod*10 + крепость;
-        let kdStrength = 10 + getMod(u["Сила"]);
-        let kdConstitution = 10 + getMod(u["Телосложение"]);
-        let kdControl = 10 + getMod(u["Управление"]);
+        let kdStrength = 13 + getMod(u["Сила"]);
+        let kdConstitution = 13 + getMod(u["Телосложение"]);
+        let kdControl = 13 + getMod(u["Управление"]);
         let reaction = getMod(u["Управление"]) + skills["Точность"];
         let will = getMod(u["Мышление"]) + getMod(u["Память"]);
         let meleeType = document.getElementById("meleeType")?.value || "strength";
