@@ -544,7 +544,16 @@
         <div class="col">
             <h3>✦ USER</h3>
             <div><label class="label-small">Имя персонажа</label><br><input type="text" id="charName" placeholder="Jolyne Cujoh" style="width:100%;"></div>
-            <div style="margin-top: 12px;"><label class="label-small">Уровень</label><br><input type="text" id="charLevel" placeholder="например: 5" style="width:100%;"></div>
+            <div style="display: flex; gap: 12px; margin-top: 12px;">
+    <div style="flex:1;">
+        <label class="label-small">Уровень</label>
+        <input type="text" id="charLevel" placeholder="5" style="width:100%;">
+    </div>
+    <div style="flex:1;">
+        <label class="label-small">Бонус мастерства</label>
+        <input type="text" id="charProfBonus" placeholder="+2" style="width:100%;">
+    </div>
+</div>
             
             <h3>✦ STATS</h3>
             <div class="user-stats-grid" id="userStatsPanel"></div>
