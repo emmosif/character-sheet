@@ -1017,7 +1017,7 @@ function updateLists(){
                 if(currentData.standPortrait){ let img=document.getElementById("standPortraitImg"); img.src=currentData.standPortrait; img.style.display="block"; document.getElementById("standPortraitPlaceholder").style.display="none"; }
                 document.getElementById("turnMessage").innerHTML = "⟡ loaded ⟡";
                 document.getElementById("charLevel").value = ld.level || "";
-                document.getElementById("charProfBonus").value = ld.profBonus || "+2"
+                document.getElementById("charProfBonus").value = ld.profBonus || "+2";
                 document.getElementById("hpMax").value = ld.hpMax || 0;
                 document.getElementById("energyMax").value = ld.energyMax || 100;
                 document.getElementById("hpMax").setAttribute("data-manual", "true");
