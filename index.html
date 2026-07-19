@@ -733,7 +733,26 @@
             for(let p of pts){ ctx.beginPath(); ctx.arc(p.x,p.y,3,0,2*Math.PI); ctx.fillStyle="#c2852c"; ctx.fill(); }
         }
         ctx.beginPath(); ctx.arc(cx,cy,innerR-3,0,2*Math.PI); ctx.fillStyle="#fdf9ed"; ctx.fill(); ctx.strokeStyle="#b89a4a"; ctx.stroke();
-        ctx.font="bold 9px 'Montserrat'"; ctx.fillStyle="#b5731a"; let disp=currentData.standName||"STAND"; if(disp.length>10) disp=disp.slice(0,8)+".."; ctx.fillText(disp, cx-18, cy+3);
+        // Отображение названия стенда в центре (полностью, с авторазмером)
+let standName = currentData.standName || "STAND";
+let maxWidth = innerR * 1.4; // максимальная ширина текста (внутренняя окружность)
+let fontSize = 9; // стартовый размер
+
+// Проверяем, влезает ли название
+ctx.font = `bold ${fontSize}px 'Montserrat'`;
+let textWidth = ctx.measureText(standName).width;
+
+// Если не влезает — уменьшаем шрифт
+while (textWidth > maxWidth && fontSize > 6) {
+    fontSize -= 0.5;
+    ctx.font = `bold ${fontSize}px 'Montserrat'`;
+    textWidth = ctx.measureText(standName).width;
+}
+
+ctx.fillStyle = "#b5731a";
+ctx.textAlign = "center";
+ctx.textBaseline = "middle";
+ctx.fillText(standName, cx, cy + 1);
     }
     
     // === ОБНОВЛЕНИЯ ===
